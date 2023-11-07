@@ -20,7 +20,7 @@ const pizza = new Product({
 });
 
 const newVoucher = new Voucher({
-    name: 'Example Voucher',
+    name: 'Example New Voucher',
     min_value: 50,
     value: 20,
     start_at: new Date('2023-11-01'), // Example start date
