@@ -9,12 +9,12 @@ require('dotenv').config();
 // require('express-async-errors'); //Error Handler
 db.connectDB();
 
-// app.use('/v1', Router);
-
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use('/v1', Router);
 
 module.exports = app;
