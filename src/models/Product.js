@@ -6,7 +6,6 @@ const ObjectId = Schema.ObjectId;
 const Product = new Schema({
     name: { type: String, require: true },
     image: { type: String, require: true },
-    name: { type: String, require: true },
     sizes: [
         {
             size: {
@@ -25,9 +24,6 @@ const Product = new Schema({
         required: true,
         enum: ['PIZZA', 'DRINK', 'OTHERS'],
     },
-    price: {
-        type: Number,
-    },
     status: {
         type: String,
         enum: ['SOLD OUT', 'STOCKING'],
@@ -40,6 +36,7 @@ const Product = new Schema({
     },
     createAt: { type: Date, default: Date.now },
     updateAt: { type: Date, default: Date.now },
+    slug: { type: String },
 });
 
 module.exports = mongoose.model('Product', Product);
