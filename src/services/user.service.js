@@ -1,5 +1,4 @@
 const user = require('../models/User');
-
 class User {
     getAllUser() {
         try {
@@ -11,18 +10,18 @@ class User {
     }
     getUserById(id) {
         try {
-            const user = user.findById({ _id: [id] });
-            return user;
+            const existedUser = user.findById({ _id: [id] });
+            return existedUser;
         } catch (error) {
             throw error;
         }
     }
     getOneUser(data) {
         try {
-            const user = user.findOne(data);
-            return user
+            const existedUser = user.findOne(data)
+            return existedUser;
         } catch (error) {
-            throw error
+            throw error;
         }
     }
     createUser(data) {
