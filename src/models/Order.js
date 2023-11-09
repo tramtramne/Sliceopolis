@@ -72,6 +72,16 @@ const Order = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
+    phoneNumber: {
+        type: String,
+        default: function () {
+            return this.model('User')
+                .findOne({ _id: this.id_user }, 'phoneNumber')
+                .then((user) => {
+                    return user.phoneNumber;
+                });
+        },
+    },
     id_voucher: {
         type: Schema.Types.ObjectId,
     },
