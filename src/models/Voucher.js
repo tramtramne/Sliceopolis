@@ -8,6 +8,11 @@ const Voucher = new Schema({
     name: {
         type: String,
     },
+    code: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     min_value: {
         type: Number,
     },
@@ -17,16 +22,16 @@ const Voucher = new Schema({
     start_at: {
         type: Date,
         default: Date.now,
-        validate: {
-            validator: function (value) {
-                return value <= this.close_at;
-            },
-            message: 'Start date must be less than close date.',
-        },
     },
     close_at: {
         type: Date,
         default: Date.now,
+        validate: {
+            validator: function (value) {
+                return value >= this.start_at;
+            },
+            message: 'Start date must be less than close date.',
+        },
     },
     amount: {
         type: Number,
@@ -39,6 +44,7 @@ const Voucher = new Schema({
     },
     used: {
         type: Number,
+        default: 0,
     },
 });
 

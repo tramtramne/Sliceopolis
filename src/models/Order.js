@@ -5,8 +5,24 @@ const ObjectId = Schema.ObjectId;
 
 const Order = new Schema({
     product: {
-        id_product: ObjectId,
-        amount: Number,
+        id_product: {
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+        },
+        price: {
+            type: Number,
+            default: function () {
+                return this.model('Product')
+                    .findOne({ _id: this.product.id_product }, 'price')
+                    .then((product) => {
+                        return product.price;
+                    });
+            },
+        },
+        amount: {
+            type: Number,
+            required: true,
+        },
     },
     total: {
         type: Number,
@@ -42,8 +58,23 @@ const Order = new Schema({
             default: 'DELIVERING',
         },
     },
-    id_user: ObjectId,
-    id_voucher: ObjectId,
+    address: {
+        type: String,
+        default: function () {
+            return this.model('User')
+                .findOne({ _id: this.id_user }, 'address')
+                .then((user) => {
+                    return user.address;
+                });
+        },
+    },
+    id_user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    },
+    id_voucher: {
+        type: Schema.Types.ObjectId,
+    },
 });
 console.log('Schema for YourModel:');
 console.dir(Order.schema, { depth: null });
