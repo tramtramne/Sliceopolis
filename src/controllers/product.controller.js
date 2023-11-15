@@ -6,19 +6,22 @@ const getAllProduct = async (req, res, next) => {
         const data = await productService.getAllProduct();
         return res.json(data);
     } catch (error) {
-        console.error('Error retrieving data:', error);
-        next(error);
+        return res.status(404).send('NOT FOUND');
     }
 };
 
 const getProductById = async (req, res, next) => {
     try {
         const { id } = req.params; // Extract the id from the request parameters
-        const data = await productService.getProductById(id); // Pass the id to the getDetailProduct function
+        console.log({ id }, 111);
+        const data = await productService.getProductById(id);
+        if (!data) {
+        }
+        console.log({ data }, 222);
         return res.json(data);
     } catch (error) {
-        console.error('Error retrieving data:', error);
-        next(error);
+        console.log(error, 404);
+        return res.status(404).send('NOT FOUND');
     }
 };
 

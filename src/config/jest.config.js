@@ -1,0 +1,27 @@
+module.exports = {
+    // Specifies the test environment
+    testEnvironment: 'node',
+
+    // Specifies the root directories for Jest to look for tests
+    roots: ['../__tests__/'],
+
+    // Enables coverage collection during tests
+    collectCoverage: true,
+
+    // Ignores specified directories from transformation during testing
+    transformIgnorePatterns: ['/node_modules/'],
+
+    // Sets the timeout for each test to 30 seconds
+    testTimeout: 20000,
+
+    // Specifies the transformation applied to certain file types (e.g., using Babel)
+    transform: {
+        '^.+\\.js$': 'babel-jest',
+    },
+
+    // Specifies the directory where coverage reports will be generated
+    coverageDirectory: '../coverage',
+
+    // Specifies the patterns for Jest to look for test files
+    testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[tj]s?(x)'],
+};
