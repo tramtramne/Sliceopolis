@@ -3,7 +3,7 @@ module.exports = {
     testEnvironment: 'node',
 
     // Specifies the root directories for Jest to look for tests
-    roots: ['../__tests__/'],
+    roots: ['../tests/'],
 
     // Enables coverage collection during tests
     collectCoverage: true,
@@ -23,5 +23,5 @@ module.exports = {
     coverageDirectory: '../coverage',
 
     // Specifies the patterns for Jest to look for test files
-    testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[tj]s?(x)'],
+    testMatch: ['**/tests/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[tj]s?(x)'],
 };
