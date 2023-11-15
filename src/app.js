@@ -15,6 +15,6 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/v1', Router);
+Router(app);
 
 module.exports = app;

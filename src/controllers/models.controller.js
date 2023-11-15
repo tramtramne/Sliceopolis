@@ -1,7 +1,7 @@
 const Product = require('../models/Product');
 const Store = require('../models/Store');
 const Voucher = require('../models/Voucher');
-const Order = require('../models/Order');
+// const Order = require('../models/Order');
 const User = require('../models/User');
 // Example Pizza
 // const pizza = new Product({

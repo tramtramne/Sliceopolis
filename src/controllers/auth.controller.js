@@ -4,11 +4,12 @@ const Auth = require('../services/auth.service');
 const signUp = async (req, res, next) => {
     try {
         let { fullname, phoneNumber, password } = req.body;
+        console.log('🚀 ~ file: auth.controller.js:5 ~ signUp ~ req.body:', req.body);
         if (password.length < 8) {
-            throw new Error("Password must be at least 8 characters long!")
+            throw new Error('Password must be at least 8 characters long!');
         }
         if (phoneNumber.length > 15) {
-            throw new Error("Phone number is not invalid!")
+            throw new Error('Phone number is not invalid!');
         }
         let user = await User.getOneUser({ phoneNumber });
         if (user) {
