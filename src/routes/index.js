@@ -4,6 +4,10 @@ const productRouter = require('./product.router');
 const voucherRouter = require('./voucher.router');
 const authRouter = require('./auth.router');
 const orderRouter = require('./order.router');
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
 function route(app) {
     app.use('/', homeRouter);
     app.use('/products', productRouter);
