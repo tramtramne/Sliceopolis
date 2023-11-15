@@ -9,7 +9,7 @@ function route(app) {
     app.use('/products', productRouter);
     app.use('/vouchers', voucherRouter);
     app.use('/auth', authRouter);
-    app.use('/orders', orderRouter);
+    // app.use('/orders', orderRouter);
 }
 
 module.exports = route;

@@ -10,8 +10,13 @@ class Product {
         }
     };
     getProductById = async (id) => {
-        const data = await productModel.findById(id).exec();
-        return data;
+        try {
+            const data = await productModel.findById(id).exec();
+            console.log(data);
+            return data;
+        } catch (error) {
+            throw error;
+        }
     };
 }
 
