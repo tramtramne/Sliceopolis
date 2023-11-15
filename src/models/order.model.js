@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
-const { Double } = require('typeorm');
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
 
 const Order = new Schema({
     product: {
@@ -50,7 +48,8 @@ const Order = new Schema({
     },
     delivery: {
         id_staff: {
-            type: ObjectId,
+            type: Schema.Types.ObjectId,
+            ref: 'User',
         },
         status: {
             type: String,
@@ -86,7 +85,7 @@ const Order = new Schema({
         type: Schema.Types.ObjectId,
     },
 });
-console.log('Schema for YourModel:');
-console.dir(Order.schema, { depth: null });
+// console.log('Schema for YourModel:');
+// console.dir(Order.schema, { depth: null });
 mongoose.connection.collection('Order');
 module.exports = mongoose.model('Order', Order);
