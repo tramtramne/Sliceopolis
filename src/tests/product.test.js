@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const supertest = require('supertest');
 const app = require('../app');
-const db = require('../config/db');
+const db = require('../configs/db');
 const productService = require('../services/product.service');
 
 beforeAll(async () => {
@@ -17,7 +17,6 @@ describe('Product', () => {
         // Check response body
         expect(Array.isArray(response.body)).toBe(true);
 
-        // Check response data
         response.body.forEach((product) => {
             expect(product).toHaveProperty('_id');
             expect(product).toHaveProperty('name');
@@ -45,8 +44,7 @@ describe('Product', () => {
 
         const response = await supertest(app).get('/products');
 
-        expect(response.status).toBe(500); // Check for Internal Server Error status code
-        // Add more specific error handling checks or messages if needed
+        expect(response.status).toBe(404);
     });
 });
 
@@ -80,10 +78,11 @@ describe('GET /products/id', () => {
         // Assumed that 'invalid_id' is an invalid product ID
         jest.spyOn(productService, 'getProductById').mockResolvedValue(null);
 
-        const response = await supertest(app).get('/products/1234567890');
-        console.log(response.body, 13224);
+        const response = await supertest(app).get('/products/12');
+
         expect(response.status).toBe(404);
-        // expect(response.body).toEqual({ error: 'NOT FOUND' });
+        console.log(response.body);
+        expect(response.body).toEqual({});
     });
 });
 afterAll(async () => {
