@@ -7,7 +7,6 @@ class Product {
 
             return data;
         } catch (error) {
-            console.error('Error retrieving data:', error);
             throw error;
         }
     };
@@ -17,7 +16,6 @@ class Product {
             console.log(data);
             return data;
         } catch (error) {
-            console.error('Error retrieving data:', error);
             throw error;
         }
     };

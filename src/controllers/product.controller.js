@@ -6,7 +6,6 @@ const getAllProduct = async (req, res, next) => {
         const data = await productService.getAllProduct();
         return res.json(data);
     } catch (error) {
-        console.error('Error retrieving data:', error);
         next(error);
     }
 };
@@ -17,7 +16,6 @@ const getProductById = async (req, res, next) => {
         const data = await productService.getProductById(id); // Pass the id to the getDetailProduct function
         return res.json(data);
     } catch (error) {
-        console.error('Error retrieving data:', error);
         next(error);
     }
 };
