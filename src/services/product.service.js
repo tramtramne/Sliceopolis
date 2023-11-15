@@ -6,13 +6,11 @@ class Product {
             const data = await productModel.find({});
             return data;
         } catch (error) {
-            // console.error('Error retrieving data:', error);
             throw error;
         }
     };
     getProductById = async (id) => {
         const data = await productModel.findById(id).exec();
-
         return data;
     };
 }

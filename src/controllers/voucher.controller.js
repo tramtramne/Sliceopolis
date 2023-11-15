@@ -7,7 +7,6 @@ const getVoucherByID = async (req, res, next) => {
         const data = await voucherService.getVoucherById(id); // Pass the id to the correct function in voucherService
         return res.json(data);
     } catch (error) {
-        console.error('Error retrieving data:', error);
         throw new Error(error);
         next(error);
     }
