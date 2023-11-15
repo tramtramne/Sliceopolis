@@ -6,11 +6,7 @@ const getAllProduct = async (req, res, next) => {
         const data = await productService.getAllProduct();
         return res.json(data);
     } catch (error) {
-<<<<<<< HEAD
         return res.status(404).send('NOT FOUND');
-=======
-        next(error);
->>>>>>> dev
     }
 };
 
@@ -20,16 +16,11 @@ const getProductById = async (req, res, next) => {
         console.log({ id }, 111);
         const data = await productService.getProductById(id);
         if (!data) {
+            return res.status(404).send('NOT FOUND');
         }
-        console.log({ data }, 222);
         return res.json(data);
     } catch (error) {
-<<<<<<< HEAD
-        console.log(error, 404);
-        return res.status(404).send('NOT FOUND');
-=======
         next(error);
->>>>>>> dev
     }
 };
 
