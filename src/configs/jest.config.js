@@ -6,10 +6,7 @@ module.exports = {
     roots: ['../tests/'],
 
     // Enables coverage collection during tests
-    collectCoverage: true,
-    coverageThreshold: {
-        global: 90,
-    },
+
     // Specifies the directory where coverage reports will be generated
     coverageDirectory: '../coverage',
     // Ignores specified directories from transformation during testing
@@ -22,8 +19,15 @@ module.exports = {
     transform: {
         '^.+\\.js$': 'babel-jest',
     },
-
     // Specifies the patterns for Jest to look for test files
     testMatch: ['**/tests/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[tj]s?(x)'],
-    globals: {},
+    collectCoverage: true,
+    coverageThreshold: {
+        global: {
+            branches: 90,
+            functions: 90,
+            lines: 90,
+        },
+    },
+    verbose: true,
 };
