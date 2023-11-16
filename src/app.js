@@ -8,7 +8,8 @@ const Router = require('./routes/index');
 const errorHandler = require('./helpers/errorHandler');
 const logger = require('./helpers/logger');
 require('dotenv').config();
-// require('express-async-errors'); //Error Handler
+const env = process.env.NODE_ENV;
+logger.setTransport();
 db.connectDB();
 
 app.use(cors({ origin: true, credentials: true }));

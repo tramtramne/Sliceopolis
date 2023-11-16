@@ -21,8 +21,27 @@ class Logger {
                 }),
             ),
             // Set up transports (storage locations) for logs - Console in this case
-            transports: [new winston.transports.Console(), new winston.transports.File({ filename: 'Logs.log' })],
+            transports: [new winston.transports.Console()],
         });
+    }
+    setTransport(env = 'development', maxSize = 1048576) {
+        // 1MB
+        if (env === 'production') {
+            console.log('entry production');
+            this.instance.add(
+                new winston.transports.DailyRotateFile({
+                    filename: path.join(__dirname, '../../', 'logs', `prod`, `%DATE%.log`),
+                    maxSize,
+                }),
+            );
+        } else {
+            this.instance.add(
+                new winston.transports.DailyRotateFile({
+                    filename: path.join(__dirname, '../../', 'logs', `dev`, `%DATE%.log`),
+                    maxSize,
+                }),
+            );
+        }
     }
 }
 

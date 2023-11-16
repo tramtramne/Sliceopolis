@@ -11,7 +11,7 @@ module.exports = (error, req, res, next) => {
     });
 
     // If the error is not of custom ErrorResponse type and environment is not 'production'
-    if (!(error instanceof ErrorResponse)) {
+    if (!(error instanceof ErrorResponse) && env !== 'production') {
         // Log a system error message to console in red
         console.log(chalk.bgRed('System error!'));
 
