@@ -11,3 +11,9 @@ To start the express server, run the following.
 ```bash
 npm start
 ```
+
+##### View coverage test
+
+```bash
+npm test -- --coverage
+```
