@@ -2,25 +2,28 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Order = new Schema({
-    product: {
-        id_product: {
-            type: Schema.Types.ObjectId,
-            ref: 'Product',
-        },
-        price: {
-            type: Number,
-            default: function () {
-                return this.model('Product')
-                    .findOne({ _id: this.product.id_product }, 'price')
-                    .then((product) => {
-                        return product.price;
-                    });
+    productList: {
+        type: [
+            {
+                id_product: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Product',
+                },
+                size: {
+                    type: String,
+                    enum: ['SMALL', 'MEDIUM', 'LARGE'],
+                    ref: 'Product',
+                },
+                price: {
+                    type: Number,
+                },
+                amount: {
+                    type: Number,
+                    required: true,
+                },
             },
-        },
-        amount: {
-            type: Number,
-            required: true,
-        },
+        ],
+        default: [],
     },
     total: {
         type: Number,
@@ -45,6 +48,9 @@ const Order = new Schema({
             enum: ['UNPAID', 'PAID'],
             default: 'UNPAID',
         },
+        paid_at: {
+            type: Date,
+        }, //
     },
     delivery: {
         id_staff: {
@@ -56,16 +62,13 @@ const Order = new Schema({
             enum: ['DELIVERING', 'DELIVERIED'],
             default: 'DELIVERING',
         },
+        shipped_at: {
+            type: Date,
+        },
     },
     address: {
         type: String,
-        default: function () {
-            return this.model('User')
-                .findOne({ _id: this.id_user }, 'address')
-                .then((user) => {
-                    return user.address;
-                });
-        },
+        required: true,
     },
     id_user: {
         type: Schema.Types.ObjectId,
@@ -73,19 +76,11 @@ const Order = new Schema({
     },
     phoneNumber: {
         type: String,
-        default: function () {
-            return this.model('User')
-                .findOne({ _id: this.id_user }, 'phoneNumber')
-                .then((user) => {
-                    return user.phoneNumber;
-                });
-        },
     },
     id_voucher: {
         type: Schema.Types.ObjectId,
     },
 });
-// console.log('Schema for YourModel:');
-// console.dir(Order.schema, { depth: null });
+
 mongoose.connection.collection('Order');
 module.exports = mongoose.model('Order', Order);

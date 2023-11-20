@@ -1,10 +1,10 @@
-const order = require('../models/order.model');
+const order = require('../models/Order');
 
 class Order {
-    createOrder(data) { 
+    createOrder(data) {
         try {
             const newOrder = order.create(data);
-            return newOrder
+            return newOrder;
         } catch (error) {
             throw error;
         }
@@ -27,7 +27,7 @@ class Order {
     }
     getOrder(data) {
         try {
-            const existedOrder = order.find(data)
+            const existedOrder = order.find(data);
             return existedOrder;
         } catch (error) {
             throw error;
