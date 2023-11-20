@@ -9,7 +9,7 @@ class Auth {
         return bcrypt.compareSync(password, hashPassword);
     }
     generateToken(user) {
-        return jwt.sign({ data: user }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.JWT_EXPIRES_IN });
+        return jwt.sign({ data: user.id }, process.env.JWT_SECRET_KEY, { expiresIn: process.env.JWT_EXPIRES_IN });
     }
 }
 
