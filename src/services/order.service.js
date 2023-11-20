@@ -19,7 +19,7 @@ class Order {
     }
     getOrderById(id) {
         try {
-            const existedOrder = order.findById({ _id: [id] });
+            const existedOrder = order.findById(id);
             return existedOrder;
         } catch (error) {
             throw error;
