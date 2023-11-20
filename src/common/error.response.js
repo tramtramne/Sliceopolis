@@ -32,8 +32,8 @@ class NotFoundResponse extends ErrorResponse {
   }
 }
 
-class BadResponse extends ErrorResponse {
-  constructor(message = ReasonPhrases.BAD_Response, code = StatusCodes.BAD_REQUEST) {
+class BadRequest extends ErrorResponse {
+  constructor(message = ReasonPhrases.BAD_REQUEST, code = StatusCodes.BAD_REQUEST) {
     super(message, code)
   }
 }
@@ -50,6 +50,6 @@ module.exports = {
   ConflictResponse,
   AuthFailureResponse,
   NotFoundResponse,
-  BadResponse,
+  BadRequest,
   UnprocessableContentResponse
 }

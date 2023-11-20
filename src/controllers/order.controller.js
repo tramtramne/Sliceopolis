@@ -1,5 +1,6 @@
+const { NotFoundResponse } = require('../common/error.response');
+const { SuccessResponse } = require('../common/success.response');
 const Order = require('../services/order.service');
-const mongoose = require('mongoose');
 
 const createOrder = async (req, res, next) => {
     try {
@@ -26,11 +27,27 @@ const getOrderById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const order = await Order.getOrderById(id);
-        return res.status(200).json({ data: order });
+        if (!order) {
+            throw new NotFoundResponse();
+        }
+        const response = new SuccessResponse({ metadata: order });
+        return response.send(req, res);
     } catch (error) {
         console.log('🚀 ~ file: order.controller.js:5 ~ getOrderById ~ error:', error);
         next(error);
     }
-}
+};
 
-module.exports = { createOrder, getAllOrder, getOrderById };
+const getOrderByUserId = async (req, res, next) => {
+    try {
+        const { id } = req.params;  
+        const orders = await Order.getOrder({ id_user: id });
+        const response = new SuccessResponse({ metadata: orders });
+        return response.send(req, res);
+    } catch (error) {
+        console.log('🚀 ~ file: order.controller.js:45 ~ getOrder ~ error:', error);
+        next(error);
+    }
+};
+
+module.exports = { createOrder, getAllOrder, getOrderById, getOrderByUserId };
