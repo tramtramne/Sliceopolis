@@ -13,3 +13,4 @@ export const NOT_FOUND = 404;
 export const UNPROCESSABLE = 422;
 export const GENERIC_ERROR = 500;
 export const NO_CONTENT = 204;
+export const PAGE_SIZE = 10;

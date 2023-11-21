@@ -26,7 +26,7 @@ const Product = new Schema({
     },
     status: {
         type: String,
-        enum: ['SOLD OUT', 'STOCKING'],
+        enum: ['SOLDOUT', 'STOCKING'],
     },
     description: {
         type: String,

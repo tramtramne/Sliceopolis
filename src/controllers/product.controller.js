@@ -1,13 +1,24 @@
-const { model } = require('mongoose');
-const productService = require('../services/product.service');
+// const { model } = require('mongoose');
+// const productService = require('../services/product.service');
+
+// const getAllProduct = async (req, res, next) => {
+//     const data = await productService.getAllProduct();
+
+//     new SuccessResponse({
+//         metadata: data,
+//     }).send({ res });
+// };
+
+const Product = require('../models/Product');
+const { paginate } = require('../utils/pagination.js'); // Assuming the pagination function is in a separate file
+const constants = require('../constants/index.js');
+const PAGE_SIZE = constants.PAGE_SIZE;
 
 const getAllProduct = async (req, res, next) => {
-    try {
-        const data = await productService.getAllProduct();
-        return res.json(data);
-    } catch (error) {
-        return res.status(404).send('NOT FOUND');
-    }
+    const { page = 1 } = req.query;
+
+    const result = await paginate(Product, parseInt(page), parseInt(PAGE_SIZE));
+    res.status(200).json(result);
 };
 
 const getProductById = async (req, res, next) => {
