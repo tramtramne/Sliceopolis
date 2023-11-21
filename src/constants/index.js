@@ -14,3 +14,16 @@ const UNPROCESSABLE = 422;
 const GENERIC_ERROR = 500;
 const NO_CONTENT = 204;
 const PAGE_SIZE = 10;
+
+module.exports = {
+    createError,
+    BAD_REQUEST,
+    UNAUTHORIZED,
+    FORBIDDEN,
+    CONFLICT,
+    NOT_FOUND,
+    UNPROCESSABLE,
+    GENERIC_ERROR,
+    NO_CONTENT,
+    PAGE_SIZE,
+};

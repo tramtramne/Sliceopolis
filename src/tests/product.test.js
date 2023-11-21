@@ -81,7 +81,6 @@ describe('GET /products/id', () => {
         const response = await supertest(app).get('/products/12');
 
         expect(response.status).toBe(404);
-        console.log(response.body);
         expect(response.body).toEqual({});
     });
 });

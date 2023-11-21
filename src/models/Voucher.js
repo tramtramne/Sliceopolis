@@ -8,15 +8,20 @@ const Voucher = new Schema({
     name: {
         type: String,
     },
+    type: {
+        type: String,
+        enum: ['FIXED', 'PERCENTAGE'],
+    },
     code: {
         type: String,
         required: true,
         unique: true,
     },
-    min_value: {
+    minimumOrder: {
         type: Number,
+        default: 0,
     },
-    value: {
+    maximumDiscount: {
         type: Number,
     },
     start_at: {
@@ -33,18 +38,21 @@ const Voucher = new Schema({
             message: 'Start date must be less than close date.',
         },
     },
-    amount: {
-        type: Number,
-        validate: {
-            validator: function (value) {
-                return value >= this.used;
-            },
-            message: 'Amount should be greater than or equal to used.',
-        },
-    },
     used: {
         type: Number,
         default: 0,
+    },
+    description: {
+        type: String,
+    },
+    user_list: {
+        type: [
+            {
+                type: ObjectId,
+                ref: 'User',
+            },
+        ],
+        default: [],
     },
 });
 
