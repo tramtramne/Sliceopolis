@@ -2,7 +2,7 @@ const { model } = require('mongoose');
 const voucherService = require('../services/voucher.service');
 const { SuccessResponse } = require('../common/success.response');
 const { ErrorResponse, BadRequest, NotFoundResponse } = require('../common/error.response');
-const { validateID } = require('../validates');
+const { validateID } = require('../validators');
 const Voucher = model('Voucher');
 
 const getVoucherById = async (req, res, next) => {

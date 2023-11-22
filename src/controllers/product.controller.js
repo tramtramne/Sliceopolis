@@ -9,7 +9,7 @@ const {
 const { paginate } = require('../utils/pagination.js');
 const { PAGE_SIZE } = require('../constants/index.js');
 const productService = require('../services/product.service');
-const { validateID } = require('../validates/index.js');
+const { validateID } = require('../validators/index.js');
 const getAllProduct = async (req, res, next) => {
     const { page = 1 } = req.query || {};
     const result = await paginate(Product, parseInt(page), parseInt(PAGE_SIZE));
