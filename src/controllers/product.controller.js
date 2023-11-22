@@ -9,11 +9,16 @@ const {
 const { paginate } = require('../utils/pagination.js');
 const { PAGE_SIZE } = require('../constants/index.js');
 const productService = require('../services/product.service');
-const { validateID } = require('../validates/index.js');
+const { validateID } = require('../validators/index.js');
 const getAllProduct = async (req, res, next) => {
-    const { page = 1 } = req.query || {};
+    const page = parseInt(req.query.page) >= 0 ? parseInt(req.query.page) : 1;
+
     const result = await paginate(Product, parseInt(page), parseInt(PAGE_SIZE));
-    new SuccessResponse({
+    if (!result) {
+        const error = new NotFoundResponse('Product not found');
+        return next(error);
+    }
+    return new SuccessResponse({
         metadata: result,
     }).send({ res });
 };

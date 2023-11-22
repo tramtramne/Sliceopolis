@@ -5,13 +5,8 @@ const paginate = async (model, pageNumber, PAGE_SIZE, query = {}) => {
     const totalDocs = await model.countDocuments(query);
     const totalPages = Math.ceil(totalDocs / PAGE_SIZE);
 
-    const results = await model.find(query).skip(skip).limit(PAGE_SIZE).exec();
+    const results = await model.find(query).skip(skip).limit(PAGE_SIZE);
 
-    return {
-        results,
-        page: pageNumber,
-        totalPages,
-        totalDocs,
-    };
+    return { results, page: pageNumber, totalPages, totalDocs };
 };
 module.exports = { paginate };
