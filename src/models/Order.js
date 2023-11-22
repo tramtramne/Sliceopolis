@@ -2,11 +2,15 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Order = new Schema({
-    productList: {
+    items: {
         type: [
             {
-                id_product: {
+                id_item: {
                     type: Schema.Types.ObjectId,
+                    ref: 'Product',
+                },
+                item_name: {
+                    type: String,
                     ref: 'Product',
                 },
                 size: {
@@ -17,13 +21,14 @@ const Order = new Schema({
                 price: {
                     type: Number,
                 },
-                amount: {
+                quantity: {
                     type: Number,
                     required: true,
                 },
             },
         ],
         default: [],
+        required: true,
     },
     total: {
         type: Number,
@@ -34,7 +39,6 @@ const Order = new Schema({
     },
     close_at: {
         type: Date,
-        default: Date.now,
     },
 
     payment: {
@@ -50,7 +54,7 @@ const Order = new Schema({
         },
         paid_at: {
             type: Date,
-        }, //
+        },
     },
     delivery: {
         id_staff: {

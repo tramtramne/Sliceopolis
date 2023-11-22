@@ -1,37 +1,55 @@
-const { ErrorResponse } = require('../common/error.response');
-const Order = require('../services/order.service');
-const mongoose = require('mongoose');
+const { NotFoundResponse, BadRequest } = require('../common/error.response');
+const { SuccessResponse, CreatedResponse } = require('../common/success.response');
+const orderService = require('../services/order.service');
 
 const createOrder = async (req, res, next) => {
-    try {
-        const newOrder = req.body;
-        await Order.createOrder(newOrder);
-        return res.status(201).json({ message: 'Order created successfully' });
-    } catch (error) {
-        console.log('🚀 ~ file: order.controller.js:5 ~ createOrder ~ error:', error);
-        next(error);
+    const body = req.body || {};
+    if (body && Object.keys(body).length === 0) {
+        throw new BadRequest();
     }
+    const newOrder = {
+        items: body.items,
+        total: body.total,
+        created_at: body.created_at,
+        payment: body.payment,
+        delivery: body.delivery,
+        address: body.address,
+        phoneNumber: body.phoneNumber,
+        id_voucher: body.id_voucher,
+        id_user: req.user.id,
+    };
+    const order = await orderService.createOrder(newOrder);
+    const response = new CreatedResponse({ metadata: order });
+    return response.send(req, res);
 };
 
-const getAllOrder = async (req, res, next) => {
-    try {
-        const orders = await Order.getAllOrder();
-        return res.status(200).json({ data: orders });
-    } catch (error) {
-        console.log('🚀 ~ file: order.controller.js:5 ~ getAllOrder ~ error:', error);
-        next(error);
-    }
+const getAllOrder = async (req, res) => {
+    const orders = await orderService.getAllOrder();
+    const response = new SuccessResponse({ metadata: orders });
+    return response.send(req, res);
 };
 
 const getOrderById = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const order = await Order.getOrderById(id);
-        return res.status(200).json({ data: order });
-    } catch (error) {
-        console.log('🚀 ~ file: order.controller.js:5 ~ getOrderById ~ error:', error);
-        next(error);
+    const { orderId } = req.params || {};
+    if (orderId && Object.keys(orderId).length === 0) {
+        throw new BadRequest();
     }
+    const order = await orderService.getOrderById(orderId);
+    if (!order) {
+        throw new NotFoundResponse();
+    }
+    const response = new SuccessResponse({ metadata: order });
+    return response.send(req, res);
 };
 
-module.exports = { createOrder, getAllOrder, getOrderById };
+const getOrderByUserId = async (req, res, next) => {
+    const { userId } = req.params || {};
+    if (userId && Object.keys(userId).length === 0) {
+        throw new BadRequest();
+    }
+    const orders = await orderService.getOrder({ id_user: userId });
+    const response = new SuccessResponse({ metadata: orders });
+    return response.send(req, res);
+};
+
+module.exports = { createOrder, getAllOrder, getOrderById, getOrderByUserId };

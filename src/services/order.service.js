@@ -1,37 +1,27 @@
 const order = require('../models/Order');
+const { validateOrder } = require('../validators/order.validator');
+const { BadRequest } = require('../common/error.response');
 
 class Order {
     createOrder(data) {
-        try {
-            const newOrder = order.create(data);
-            return newOrder;
-        } catch (error) {
-            throw error;
+        const validateError = validateOrder(data);
+        if (validateError) {
+            throw new BadRequest(validateError);
         }
+        const newOrder = order.create(data);
+        return newOrder;
     }
     getAllOrder() {
-        try {
-            const orders = order.find({});
-            return orders;
-        } catch (error) {
-            throw error;
-        }
+        const orders = order.find({});
+        return orders;
     }
     getOrderById(id) {
-        try {
-            const existedOrder = order.findById(id);
-            return existedOrder;
-        } catch (error) {
-            throw error;
-        }
+        const existedOrder = order.findById(id);
+        return existedOrder;
     }
     getOrder(data) {
-        try {
-            const existedOrder = order.find(data);
-            return existedOrder;
-        } catch (error) {
-            throw error;
-        }
+        const existedOrder = order.find(data);
+        return existedOrder;
     }
 }
 
