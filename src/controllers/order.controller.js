@@ -1,3 +1,4 @@
+const { ErrorResponse } = require('../common/error.response');
 const Order = require('../services/order.service');
 const mongoose = require('mongoose');
 
@@ -31,6 +32,6 @@ const getOrderById = async (req, res, next) => {
         console.log('🚀 ~ file: order.controller.js:5 ~ getOrderById ~ error:', error);
         next(error);
     }
-}
+};
 
 module.exports = { createOrder, getAllOrder, getOrderById };

@@ -15,7 +15,7 @@ const User = new Schema({
             message: (props) => `Password must be at least 8 characters long!`,
         },
     },
-    address: { type: String, maxLength: 255 },
+    address: { type: String, maxLength: 255, default: null },
     avatar: { type: String, maxLength: 255, default: avtDefault },
     createAt: { type: Date, default: Date.now },
     updateAt: { type: Date, default: Date.now },
@@ -24,7 +24,7 @@ const User = new Schema({
         type: String,
         required: true,
         enum: ['ADMIN', 'USER', 'STAFF'],
-        default: 'USER'
+        default: 'USER',
     },
 });
 
