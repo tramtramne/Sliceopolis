@@ -10,7 +10,7 @@ class User {
     }
     getUserById(id) {
         try {
-            const existedUser = user.findById({ _id: [id] });
+            const existedUser = user.findById(id);
             return existedUser;
         } catch (error) {
             throw error;
@@ -18,7 +18,7 @@ class User {
     }
     getOneUser(data) {
         try {
-            const existedUser = user.findOne(data)
+            const existedUser = user.findOne(data);
             return existedUser;
         } catch (error) {
             throw error;

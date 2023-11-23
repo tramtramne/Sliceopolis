@@ -13,6 +13,7 @@ class Auth {
         }
 
         // check if user is existed
+        console.log(user.phoneNumber);
         const existedUser = await userService.getOneUser({ phoneNumber: user.phoneNumber });
         if (existedUser) {
             throw new ConflictResponse('User already exists');

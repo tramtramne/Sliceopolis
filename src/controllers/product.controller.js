@@ -20,7 +20,7 @@ const getAllProduct = async (req, res, next) => {
     }
     return new SuccessResponse({
         metadata: result,
-    }).send({ res });
+    }).send({ req, res });
 };
 
 const getProductById = async (req, res, next) => {

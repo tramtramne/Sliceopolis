@@ -11,6 +11,7 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
     const { phoneNumber, password } = req.body;
     const token = await authSerivce.login(phoneNumber, password);
+    console.log(token);
     const response = new SuccessResponse({ message: 'Login successfully' });
     return response.send(req, res, (cookies = { token: [token], maxAge: 900000, httpOnly: true }));
 };

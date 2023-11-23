@@ -16,7 +16,6 @@ const User = new Schema({
         },
     },
     address: { type: String, maxLength: 255, default: null },
-    avatar: { type: String, maxLength: 255, default: avtDefault },
     createAt: { type: Date, default: Date.now },
     updateAt: { type: Date, default: Date.now },
 

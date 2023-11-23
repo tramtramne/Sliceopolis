@@ -12,7 +12,7 @@ const verifyToken = async (req, res, next) => {
         throw new BadRequest('Invalid token');
     }
     req.user = verified;
-    next()
+    next();
 };
 
 const checkRoles = (roles) => {
