@@ -7,14 +7,13 @@ const verifyToken = async (req, res, next) => {
     if (!token) {
         throw new AuthFailureResponse('Access denied');
     }
+    let verified;
     try {
-        const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
     } catch (err) {
         throw new AuthFailureResponse();
     }
-    // if (!verified) {
-    //     throw new AuthFailureResponse();
-    // }
+
     req.user = verified;
     next();
 };
