@@ -1,16 +1,20 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const { AuthFailureResponse, BadRequest } = require('../common/error.response');
+const { AuthFailureResponse, BadRequest, ErrorResponse } = require('../common/error.response');
 
 const verifyToken = async (req, res, next) => {
     const token = req.headers['auth-token'];
     if (!token) {
         throw new AuthFailureResponse('Access denied');
     }
-    const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    if (!verified) {
-        throw new BadRequest('Invalid token');
+    try {
+        const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    } catch (err) {
+        throw new AuthFailureResponse();
     }
+    // if (!verified) {
+    //     throw new AuthFailureResponse();
+    // }
     req.user = verified;
     next();
 };

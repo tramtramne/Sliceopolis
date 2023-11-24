@@ -15,6 +15,13 @@ const GENERIC_ERROR = 500;
 const NO_CONTENT = 204;
 const PAGE_SIZE = 10;
 
+const USER = {
+    MAX_PASSWORD_LENGTH: 30,
+    MIN_PASSWORD_LENGTH: 8,
+    MAX_FULLNAME_LENGTH: 100,
+    MIN_FULLNAME_LENGTH: 1,
+};
+
 module.exports = {
     createError,
     BAD_REQUEST,
@@ -26,4 +33,5 @@ module.exports = {
     GENERIC_ERROR,
     NO_CONTENT,
     PAGE_SIZE,
+    USER,
 };

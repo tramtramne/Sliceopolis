@@ -2,7 +2,7 @@ const voucherModel = require('../models/Voucher');
 
 class Voucher {
     async getAllVoucher() {
-        const data = await productModel.find({});
+        const data = await voucherModel.find({});
         return data;
     }
     async getVoucherById(id) {

@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const vouchersController = require('../controllers/voucher.controller');
-
-router.get('/:id', vouchersController.getVoucherById);
-router.post('/applyVoucher', vouchersController.applyVoucherToOrder);
+const asyncHandler = require('../middlewares/asyncHandler');
+router.get('/:id', asyncHandler(vouchersController.getVoucherById));
+router.post('/applyVoucher', asyncHandler(vouchersController.applyVoucherToOrder));
+router.get('/', asyncHandler(vouchersController.getAllVoucher));
 module.exports = router;

@@ -1,4 +1,5 @@
 const user = require('../models/User');
+const order = require('../models/Order');
 class User {
     getAllUser() {
         try {
@@ -28,6 +29,14 @@ class User {
         try {
             const newUser = user.create(data);
             return newUser;
+        } catch (error) {
+            throw error;
+        }
+    }
+    viewOrderHistory(id) {
+        try {
+            const data = order.find({ id_user: id }).exec();
+            return data;
         } catch (error) {
             throw error;
         }

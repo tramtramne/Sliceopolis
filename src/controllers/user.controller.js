@@ -4,6 +4,7 @@ const { ErrorResponse, NotFoundResponse, BadRequest } = require('../common/error
 const { SuccessResponse } = require('../common/success.response');
 const { registerValidator, editProfileValidator } = require('../validators');
 const User = require('../models/User');
+
 const getProfile = async (req, res, next) => {
     const { id } = req.user;
 
@@ -68,7 +69,21 @@ const editProfile = async (req, res, next) => {
     }).send({ res });
 };
 
+const viewOrderHistory = async (req, res, next) => {
+    const { id } = req.user || {};
+    if (!validateID(id)) {
+        return next(new ErrorResponse('Invalid user ID', 422));
+    }
+    const data = await userService.viewOrderHistory(id);
+    if (!data) {
+        return next(new NotFoundResponse('User not found'));
+    }
+    return new SuccessResponse({
+        metadata: data,
+    }).send({ res });
+};
 module.exports = {
     getProfile,
     editProfile,
+    viewOrderHistory,
 };

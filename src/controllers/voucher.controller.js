@@ -5,6 +5,15 @@ const { ErrorResponse, BadRequest, NotFoundResponse } = require('../common/error
 const { validateID } = require('../validators');
 const Voucher = model('Voucher');
 
+const getAllVoucher = async (req, res, next) => {
+    const data = await voucherService.getAllVoucher();
+    if (!data) {
+        return next(new NotFoundResponse('Not found'));
+    }
+    return new SuccessResponse({
+        metadata: { data: data, total: data.length },
+    }).send({ res });
+};
 const getVoucherById = async (req, res, next) => {
     if (!req.params) {
         return next(new BadRequest('Bad request'));
@@ -52,4 +61,4 @@ const applyVoucherToOrder = async (req, res, next) => {
         }).send({ res });
     }
 };
-module.exports = { getVoucherById, applyVoucherToOrder };
+module.exports = { getVoucherById, applyVoucherToOrder, getAllVoucher };

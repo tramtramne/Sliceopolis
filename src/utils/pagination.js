@@ -7,6 +7,8 @@ const paginate = async (model, pageNumber, PAGE_SIZE, query = {}) => {
 
     const results = await model.find(query).skip(skip).limit(PAGE_SIZE);
 
-    return { results, page: pageNumber, totalPages, totalDocs };
+    const pageSize = results.length;
+
+    return { results, page: pageNumber, pageSize: pageSize, totalPages, totalDocs };
 };
 module.exports = { paginate };

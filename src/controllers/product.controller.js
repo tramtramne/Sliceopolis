@@ -12,7 +12,6 @@ const productService = require('../services/product.service');
 const { validateID } = require('../validators/index.js');
 const getAllProduct = async (req, res, next) => {
     const page = parseInt(req.query.page) >= 0 ? parseInt(req.query.page) : 1;
-
     const result = await paginate(Product, parseInt(page), parseInt(PAGE_SIZE));
     if (!result) {
         const error = new NotFoundResponse('Product not found');
@@ -24,7 +23,6 @@ const getAllProduct = async (req, res, next) => {
 };
 
 const getProductById = async (req, res, next) => {
-    console.log(123, 234);
     if (!req.params || !req.params.id) {
         return next(new BadRequest('Bad request'));
     }
