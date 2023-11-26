@@ -30,7 +30,7 @@ const getProfile = async (req, res, next) => {
         address: user.address,
         role: user.role,
     };
-    console.log(userProfile);
+
     return new SuccessResponse({
         metadata: userProfile,
     }).send({ res });

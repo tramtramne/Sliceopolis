@@ -18,16 +18,7 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// app.use("", Router);
-// Router(app, (req, res) => {
-//     console.log('1234');
-// });
-
 Router(app);
-
-// app.use((req, res, next) => {
-//     Router(app);
-// });
 
 global.__logger = logger.instance;
 

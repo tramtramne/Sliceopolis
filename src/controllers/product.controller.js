@@ -10,6 +10,8 @@ const { paginate } = require('../utils/pagination.js');
 const { PAGE_SIZE } = require('../constants/index.js');
 const productService = require('../services/product.service');
 const { validateID } = require('../validators/index.js');
+const cloudinary = require('../utils/cloudinary');
+
 const getAllProduct = async (req, res, next) => {
     const page = parseInt(req.query.page) >= 0 ? parseInt(req.query.page) : 1;
     const result = await paginate(Product, parseInt(page), parseInt(PAGE_SIZE));
@@ -59,4 +61,35 @@ const deleteProductById = async (req, res, next) => {
         metadata: data,
     }).send({ res });
 };
-module.exports = { getAllProduct, getProductById };
+
+const createProduct = async (req, res, next) => {
+    const body = req.body || {};
+    console.log(body);
+    if (body && Object.keys(body).length === 0) {
+        throw new BadRequest();
+    }
+
+    const newProduct = {
+        name: body.name,
+        image: body.image,
+        sizes: body.sizes,
+        category: body.category,
+        description: body.description,
+    };
+    if (newProduct.image) {
+        const uploadedResponse = await cloudinary.uploader.upload(newProduct.image, {
+            upload_preset: 'uploadProduct', // name of preset
+        });
+
+        if (uploadedResponse) {
+            const product = await productService.createProduct(newProduct);
+            return new SuccessResponse({
+                metadata: product,
+            }).send(req, res);
+        }
+    } else {
+        next(new UnprocessableContentResponse('Image is required'));
+    }
+};
+
+module.exports = { getAllProduct, getProductById, deleteProductById, createProduct };

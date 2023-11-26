@@ -7,6 +7,12 @@ router.get('/', asyncHandler(productsController.getAllProduct));
 router.get('/:id', asyncHandler(productsController.getProductById));
 
 // ADMIN
+router.post(
+    '/',
+    asyncHandler(verifyToken),
+    asyncHandler(checkRoles(['ADMIN'])),
+    asyncHandler(productsController.createProduct),
+);
 router.delete(
     '/:id',
     asyncHandler(verifyToken),

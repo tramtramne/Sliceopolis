@@ -22,6 +22,14 @@ const USER = {
     MIN_FULLNAME_LENGTH: 1,
 };
 
+const PRODUCT = {
+    MAX_NAME_LENGTH: 100,
+    MIN_NAME_LENGTH: 1,
+
+    MAX_DESCRIPTION_LENGTH: 300,
+    MIN_DESCRIPTION_LENGTH: 2,
+};
+
 module.exports = {
     createError,
     BAD_REQUEST,
@@ -34,4 +42,5 @@ module.exports = {
     NO_CONTENT,
     PAGE_SIZE,
     USER,
+    PRODUCT,
 };

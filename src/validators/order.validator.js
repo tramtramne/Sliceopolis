@@ -23,7 +23,6 @@ const deliverySchema = Joi.object({
 const orderSchema = Joi.object({
     items: Joi.array().items(itemSchema).required(),
     total: Joi.number(),
-    created_at: Joi.date().default(Date.now),
     payment: paymentSchema,
     delivery: deliverySchema,
     address: Joi.string().required(),

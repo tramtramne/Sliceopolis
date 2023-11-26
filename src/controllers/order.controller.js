@@ -12,7 +12,7 @@ const createOrder = async (req, res, next) => {
     const newOrder = {
         items: body.items,
         total: body.total,
-        created_at: body.created_at,
+        created_at: Date.now(),
         payment: body.payment,
         delivery: body.delivery,
         address: body.address,
@@ -51,7 +51,7 @@ const getOrderById = async (req, res, next) => {
     if (!order) {
         throw new NotFoundResponse();
     }
-    console.log(user);
+
     if (order.id_user.toString() !== id && user.role !== 'ADMIN' && user.role !== 'STAFF') {
         throw new ErrorResponse('Unauthorized', 401);
     }
@@ -66,13 +66,12 @@ const updateDeliveryStatus = async (req, res) => {
     }
 
     const orderId = req.params.orderId;
-    console.log(orderId);
+
     const order = await Order.findById(orderId);
     if (!order) {
         next(new NotFoundResponse('Order not found'));
     }
 
-    // order.delivery.status = newStatus;
     if (order.delivery.status === 'DELIVERING') {
         order.delivery.status = 'DELIVERED';
     } else if (order.delivery.status === 'DELIVERED') {

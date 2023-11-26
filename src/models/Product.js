@@ -38,7 +38,6 @@ const Product = new Schema({
 
     createAt: { type: Date, default: Date.now },
     updateAt: { type: Date, default: Date.now },
-    slug: { type: String },
 });
 
 module.exports = mongoose.model('Product', Product);
