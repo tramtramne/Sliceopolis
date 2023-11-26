@@ -1,7 +1,9 @@
-const { NotFoundResponse, BadRequest } = require('../common/error.response');
+const { NotFoundResponse, BadRequest, ErrorResponse } = require('../common/error.response');
 const { SuccessResponse, CreatedResponse } = require('../common/success.response');
 const orderService = require('../services/order.service');
-
+const Order = require('../models/Order');
+const User = require('../models/User');
+const { validateID } = require('../validators/index');
 const createOrder = async (req, res, next) => {
     const body = req.body || {};
     if (body && Object.keys(body).length === 0) {
@@ -25,7 +27,12 @@ const createOrder = async (req, res, next) => {
 
 const getAllOrder = async (req, res) => {
     const orders = await orderService.getAllOrder();
-    const response = new SuccessResponse({ metadata: orders });
+    const response = new SuccessResponse({
+        metadata: {
+            data: orders,
+            totalLength: orders.length,
+        },
+    });
     return response.send(req, res);
 };
 
@@ -34,22 +41,52 @@ const getOrderById = async (req, res, next) => {
     if (orderId && Object.keys(orderId).length === 0) {
         throw new BadRequest();
     }
+
+    const { id } = req.user || {};
+    if (!validateID(id)) {
+        throw new ErrorResponse('Invalid user ID', 422);
+    }
+    const user = await User.findById(id);
     const order = await orderService.getOrderById(orderId);
     if (!order) {
         throw new NotFoundResponse();
     }
+    console.log(user);
+    if (order.id_user.toString() !== id && user.role !== 'ADMIN' && user.role !== 'STAFF') {
+        throw new ErrorResponse('Unauthorized', 401);
+    }
+
     const response = new SuccessResponse({ metadata: order });
     return response.send(req, res);
 };
 
-const getOrderByUserId = async (req, res, next) => {
-    const { userId } = req.params || {};
-    if (userId && Object.keys(userId).length === 0) {
-        throw new BadRequest();
+const updateDeliveryStatus = async (req, res) => {
+    if (!req.params.orderId) {
+        next(new BadRequest());
     }
-    const orders = await orderService.getOrder({ id_user: userId });
-    const response = new SuccessResponse({ metadata: orders });
-    return response.send(req, res);
+
+    const orderId = req.params.orderId;
+    console.log(orderId);
+    const order = await Order.findById(orderId);
+    if (!order) {
+        next(new NotFoundResponse('Order not found'));
+    }
+
+    // order.delivery.status = newStatus;
+    if (order.delivery.status === 'DELIVERING') {
+        order.delivery.status = 'DELIVERED';
+    } else if (order.delivery.status === 'DELIVERED') {
+        order.delivery.status = 'DELIVERING';
+    }
+    if (order.delivery.status === 'DELIVERED') {
+        order.delivery.shipped_at = new Date();
+    }
+
+    await order.save();
+    return new SuccessResponse({
+        message: 'Change successfully',
+        metadata: order,
+    }).send(req, res);
 };
 
-module.exports = { createOrder, getAllOrder, getOrderById, getOrderByUserId };
+module.exports = { createOrder, getAllOrder, getOrderById, updateDeliveryStatus };

@@ -63,7 +63,7 @@ const Order = new Schema({
         },
         status: {
             type: String,
-            enum: ['DELIVERING', 'DELIVERIED'],
+            enum: ['DELIVERING', 'DELIVERED'],
             default: 'DELIVERING',
         },
         shipped_at: {

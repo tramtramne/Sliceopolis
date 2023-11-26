@@ -16,8 +16,8 @@ const paymentSchema = Joi.object({
 
 const deliverySchema = Joi.object({
     id_staff: Joi.string(),
-    status: Joi.string().valid('DELIVERING', 'DELIVERIED').default('DELIVERING'),
-    shipped_at: Joi.date().when('status', { is: 'DELIVERIED', then: Joi.date().required() }),
+    status: Joi.string().valid('DELIVERING', 'DELIVERED').default('DELIVERING'),
+    shipped_at: Joi.date().when('status', { is: 'DELIVERED', then: Joi.date().required() }),
 });
 
 const orderSchema = Joi.object({
@@ -34,7 +34,7 @@ const orderSchema = Joi.object({
 
 const validateOrder = (order) => {
     const { error } = orderSchema.validate(order);
-    console.log("🚀 ~ file: order.validator.js:37 ~ validateOrder ~ error:", error)
+    console.log('🚀 ~ file: order.validator.js:37 ~ validateOrder ~ error:', error);
     return error;
 };
 

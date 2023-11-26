@@ -42,4 +42,21 @@ const getProductById = async (req, res, next) => {
     }).send({ res });
 };
 
+const deleteProductById = async (req, res, next) => {
+    if (!req.params || !req.params.id) {
+        return next(new BadRequest('Bad request'));
+    }
+    const { id } = req.params;
+    if (!validateID(id)) {
+        const error = new BadRequest('Invalid product ID');
+        return next(error);
+    }
+    const data = await productService.deleteProductById(id);
+    if (!data) {
+        return next(new NotFoundResponse('Product not found'));
+    }
+    return new SuccessResponse({
+        metadata: data,
+    }).send({ res });
+};
 module.exports = { getAllProduct, getProductById };

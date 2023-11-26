@@ -17,6 +17,13 @@ const Product = new Schema({
                 type: Number,
                 required: true,
             },
+            status: {
+                type: String,
+                enum: ['SOLDOUT', 'STOCKING'],
+            },
+            sold: {
+                type: Number,
+            },
         },
     ],
     category: {
@@ -24,16 +31,11 @@ const Product = new Schema({
         required: true,
         enum: ['PIZZA', 'DRINK', 'OTHERS'],
     },
-    status: {
-        type: String,
-        enum: ['SOLDOUT', 'STOCKING'],
-    },
+
     description: {
         type: String,
     },
-    sold: {
-        type: Number,
-    },
+
     createAt: { type: Date, default: Date.now },
     updateAt: { type: Date, default: Date.now },
     slug: { type: String },

@@ -1,6 +1,6 @@
 #### account staff
 
-"phoneNumber": "0888777666",
+"phoneNumber": "0881777666",
 "password": "exampleStaff",
 
 #### account user

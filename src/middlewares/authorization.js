@@ -21,7 +21,8 @@ const verifyToken = async (req, res, next) => {
 const checkRoles = (roles) => {
     return (req, res, next) => {
         const { user } = req;
-        if (roles.indexOf(user.data.role) !== -1) {
+        console.log(user);
+        if (roles.indexOf(user.role) !== -1) {
             next();
         } else {
             res.status(403).json({ message: 'Forbidden' });

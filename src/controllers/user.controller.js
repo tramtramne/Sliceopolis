@@ -82,8 +82,22 @@ const viewOrderHistory = async (req, res, next) => {
         metadata: data,
     }).send({ res });
 };
+
+const getAllUser = async (req, res, next) => {
+    const data = await userService.getAllUser();
+    if (!data) {
+        return next(new NotFoundResponse('User not found'));
+    }
+    return new SuccessResponse({
+        metadata: {
+            data: data,
+            total: data.length,
+        },
+    }).send({ res });
+};
 module.exports = {
     getProfile,
     editProfile,
     viewOrderHistory,
+    getAllUser,
 };
