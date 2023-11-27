@@ -17,7 +17,7 @@ router.get('/', asyncHandler(verifyToken), asyncHandler(checkRoles(['ADMIN', 'ST
 router.get('/:orderId', asyncHandler(verifyToken), asyncHandler(getOrderById));
 //ADMIN, STAFF
 router.put(
-    '/:orderId/updateDeliveryStatus',
+    '/:orderId/',
     asyncHandler(verifyToken),
     asyncHandler(checkRoles(['ADMIN', 'STAFF'])),
     asyncHandler(updateDeliveryStatus),

@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const userService = require('./user.service');
 const validator = require('../validators');
-const { ConflictResponse, BadRequest, AuthFailureResponse } = require('../common/error.response');
+const { ConflictResponse, BadRequest, AuthFailureResponse, NotFoundResponse } = require('../common/error.response');
 
 class Auth {
     async register(user) {
@@ -32,7 +32,7 @@ class Auth {
         // check if user is existed
         const user = await userService.getOneUser({ phoneNumber });
         if (!user) {
-            throw new AuthFailureResponse('User not found');
+            throw new NotFoundResponse('User not found');
         }
 
         // check password

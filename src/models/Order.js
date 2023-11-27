@@ -37,10 +37,6 @@ const Order = new Schema({
         type: Date,
         default: Date.now,
     },
-    close_at: {
-        type: Date,
-    },
-
     payment: {
         method: {
             type: String,
@@ -81,7 +77,7 @@ const Order = new Schema({
     phoneNumber: {
         type: String,
     },
-    id_voucher: {
+    code: {
         type: Schema.Types.ObjectId,
     },
 });

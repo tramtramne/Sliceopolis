@@ -4,36 +4,68 @@ const orderService = require('../services/order.service');
 const Order = require('../models/Order');
 const User = require('../models/User');
 const { validateID } = require('../validators/index');
+const { paginate } = require('../utils/pagination.js');
+const { PAGE_SIZE } = require('../constants/index.js');
+const { applyVoucherToOrder } = require('./voucher.controller');
+
+const totalPrice = (items) => {
+    let total = 0;
+    items.forEach((item) => {
+        total += item.price * item.quantity;
+    });
+    return total;
+};
 const createOrder = async (req, res, next) => {
     const body = req.body || {};
     if (body && Object.keys(body).length === 0) {
         throw new BadRequest();
     }
+    const id = req.user.id;
+    const user = await User.findById(id);
+    if (!user) {
+        throw new NotFoundResponse('User not found');
+    }
     const newOrder = {
         items: body.items,
-        total: body.total,
+        total: totalPrice(body.items),
         created_at: Date.now(),
-        payment: body.payment,
-        delivery: body.delivery,
-        address: body.address,
-        phoneNumber: body.phoneNumber,
-        id_voucher: body.id_voucher,
-        id_user: req.user.id,
+        update_at: Date.now(),
+        payment: body.payment || {
+            method: 'COD',
+            status: 'UNPAID',
+        },
+        delivery: body.delivery || {
+            id_staff: null,
+            status: 'DELIVERING',
+            shipped_at: null,
+        },
+
+        address: body.address || user.address,
+        phoneNumber: body.phoneNumber || user.phoneNumber,
+        voucher_code: body.voucher_code || null,
+        id_user: id,
     };
+    const result = await applyVoucherToOrder(newOrder.total, newOrder.voucher_code, newOrder.id_user);
+    if (result.code === 404) {
+        return next(new ErrorResponse(result.message, 404));
+    }
+    newOrder.total = result.metadata;
     const order = await orderService.createOrder(newOrder);
     const response = new CreatedResponse({ metadata: order });
     return response.send(req, res);
 };
 
-const getAllOrder = async (req, res) => {
-    const orders = await orderService.getAllOrder();
-    const response = new SuccessResponse({
-        metadata: {
-            data: orders,
-            totalLength: orders.length,
-        },
-    });
-    return response.send(req, res);
+const getAllOrder = async (req, res, next) => {
+    const page = parseInt(req.query.page) >= 0 ? parseInt(req.query.page) : 1;
+    const result = await paginate(Order, parseInt(page), parseInt(PAGE_SIZE));
+
+    if (!result) {
+        const error = new NotFoundResponse('Order not found');
+        return next(error);
+    }
+    return new SuccessResponse({
+        metadata: result,
+    }).send({ req, res });
 };
 
 const getOrderById = async (req, res, next) => {
@@ -60,10 +92,11 @@ const getOrderById = async (req, res, next) => {
     return response.send(req, res);
 };
 
-const updateDeliveryStatus = async (req, res) => {
+const updateDeliveryStatus = async (req, res, next) => {
     if (!req.params.orderId) {
         next(new BadRequest());
     }
+    const idStaff = req.user.id || {};
 
     const orderId = req.params.orderId;
 
@@ -71,7 +104,9 @@ const updateDeliveryStatus = async (req, res) => {
     if (!order) {
         next(new NotFoundResponse('Order not found'));
     }
-
+    if (idStaff.toString() !== order.id_staff.toString()) {
+        next(new ErrorResponse('Unauthorized', 401));
+    }
     if (order.delivery.status === 'DELIVERING') {
         order.delivery.status = 'DELIVERED';
     } else if (order.delivery.status === 'DELIVERED') {

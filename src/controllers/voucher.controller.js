@@ -4,15 +4,19 @@ const { SuccessResponse } = require('../common/success.response');
 const { ErrorResponse, BadRequest, NotFoundResponse } = require('../common/error.response');
 const { validateID } = require('../validators');
 const Voucher = model('Voucher');
+const { paginate } = require('../utils/pagination.js');
+const { PAGE_SIZE } = require('../constants/index.js');
 
 const getAllVoucher = async (req, res, next) => {
-    const data = await voucherService.getAllVoucher();
-    if (!data) {
-        return next(new NotFoundResponse('Not found'));
+    const page = parseInt(req.query.page) >= 0 ? parseInt(req.query.page) : 1;
+    const result = await paginate(Voucher, parseInt(page), parseInt(PAGE_SIZE));
+    if (!result) {
+        const error = new NotFoundResponse('Voucher not found');
+        return next(error);
     }
     return new SuccessResponse({
-        metadata: { data: data, total: data.length },
-    }).send({ res });
+        metadata: result,
+    }).send({ req, res });
 };
 const getVoucherById = async (req, res, next) => {
     if (!req.params) {
@@ -25,40 +29,35 @@ const getVoucherById = async (req, res, next) => {
 
     const data = await voucherService.getVoucherById(id);
     if (!data) {
-        return next(new NotFoundResponse('Product not found'));
+        return next(new NotFoundResponse('Voucher not found'));
     }
     return new SuccessResponse({
         metadata: data,
     }).send({ res });
 };
 
-const applyVoucherToOrder = async (req, res, next) => {
-    const { totalPrice, voucherCode, idUser } = req.body || {};
-
-    const voucher = await Voucher.findOne({ code: voucherCode }).exec();
-    if (!voucher) {
+const applyVoucherToOrder = async (totalPrice, voucher_code, idUser) => {
+    console.log(totalPrice, voucher_code, idUser);
+    const voucher = await Voucher.findOne({ code: voucher_code }).exec();
+    console.log(123456789, voucher);
+    if (!voucher || voucher.start_at > Date.now() || voucher.close_at < Date.now()) {
         console.log('Voucher not found');
-        return next(new ErrorResponse('Voucher not found', 404));
+        return {
+            message: 'Voucher not found',
+            code: 404,
+        };
     }
 
-    if (voucher.start_at > Date.now()) {
-        console.log('Now is before start_at');
-        return next(new ErrorResponse('Voucher not found', 404));
-    }
-    if (voucher.close_at < Date.now()) {
-        console.log('Now is after close_at');
-        return next(new ErrorResponse('Voucher not found', 404));
-    }
+    const order = voucherService.applyVoucherToOrder(totalPrice, voucher, idUser);
 
-    const order = await voucherService.applyVoucherToOrder(totalPrice, voucher, idUser);
     if (order.status === 'error') {
-        return next(new ErrorResponse(order.message, 403));
+        return new ErrorResponse(order.message, 403);
     } else {
-        return new SuccessResponse({
+        return {
             metadata: order.totalPrice,
             message: order.message,
             code: 200,
-        }).send({ res });
+        };
     }
 };
 module.exports = { getVoucherById, applyVoucherToOrder, getAllVoucher };
