@@ -4,7 +4,8 @@ const { ErrorResponse, NotFoundResponse, BadRequest } = require('../common/error
 const { SuccessResponse } = require('../common/success.response');
 const { registerValidator, editProfileValidator } = require('../validators');
 const User = require('../models/User');
-
+const { paginate } = require('../utils/pagination.js');
+const { PAGE_SIZE } = require('../constants/index.js');
 const getProfile = async (req, res, next) => {
     const { id } = req.user;
 
@@ -12,19 +13,12 @@ const getProfile = async (req, res, next) => {
         return next(new ErrorResponse('Invalid user ID', 422));
     }
 
-    const body = req.body || {};
-
     const user = await userService.getUserById(id);
-
-    const newProfile = {
-        fullname: body.fullname || user.fullname,
-        phoneNumber: body.phoneNumber || user.phoneNumber,
-        address: body.address || user.address,
-    };
     if (!user) {
         return next(new NotFoundResponse('User not found'));
     }
     const userProfile = {
+        id: user._id,
         fullName: user.fullname,
         phoneNumber: user.phoneNumber,
         address: user.address,
@@ -59,6 +53,7 @@ const editProfile = async (req, res, next) => {
     if (validateInfo) {
         throw new BadRequest(validateInfo);
     }
+
     const user = await User.findByIdAndUpdate(id, { $set: userProfile }, { new: true });
 
     if (!user) {
@@ -84,16 +79,25 @@ const viewOrderHistory = async (req, res, next) => {
 };
 
 const getAllUser = async (req, res, next) => {
-    const data = await userService.getAllUser();
-    if (!data) {
-        return next(new NotFoundResponse('User not found'));
+    // const data = await userService.getAllUser();
+    // if (!data) {
+    //     return next(new NotFoundResponse('User not found'));
+    // }
+    // return new SuccessResponse({
+    //     metadata: {
+    //         data: data,
+    //         total: data.length,
+    //     },
+    // }).send({ res });
+    const page = parseInt(req.query.page) >= 0 ? parseInt(req.query.page) : 1;
+    const result = await paginate(User, parseInt(page), parseInt(PAGE_SIZE));
+    if (!result) {
+        const error = new NotFoundResponse('Product not found');
+        return next(error);
     }
     return new SuccessResponse({
-        metadata: {
-            data: data,
-            total: data.length,
-        },
-    }).send({ res });
+        metadata: result,
+    }).send({ req, res });
 };
 module.exports = {
     getProfile,

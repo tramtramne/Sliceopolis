@@ -49,9 +49,8 @@ class Voucher {
         }
         console.log(totalPriceTemp);
         return {
+            newPrice: totalPriceTemp,
             status: 'success',
-            message: 'Voucher applied successfully',
-            totalPrice: totalPriceTemp,
         };
     }
 }
