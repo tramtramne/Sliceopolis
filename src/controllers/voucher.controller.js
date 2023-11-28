@@ -39,7 +39,6 @@ const getVoucherById = async (req, res, next) => {
 const applyVoucherToOrder = async (totalPrice, voucher_code, idUser) => {
     console.log(totalPrice, voucher_code, idUser);
     const voucher = await Voucher.findOne({ code: voucher_code }).exec();
-    console.log(123456789, voucher);
     if (!voucher || voucher.start_at > Date.now() || voucher.close_at < Date.now()) {
         console.log('Voucher not found');
         return {

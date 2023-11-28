@@ -17,6 +17,10 @@ const Voucher = new Schema({
         required: true,
         unique: true,
     },
+    value: {
+        type: Number,
+        required: true,
+    },
     minimumOrder: {
         type: Number,
         default: 0,

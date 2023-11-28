@@ -47,6 +47,9 @@ class Voucher {
         if (voucher.maximumDiscount < totalPrice) {
             totalPriceTemp = totalPrice - voucher.maximumDiscount;
         }
+        if (totalPriceTemp < 0) {
+            totalPriceTemp = 0;
+        }
         console.log(totalPriceTemp);
         return {
             newPrice: totalPriceTemp,
