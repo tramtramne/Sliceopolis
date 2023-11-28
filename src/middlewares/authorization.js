@@ -3,7 +3,9 @@ const User = require('../models/User');
 const { AuthFailureResponse, BadRequest, ErrorResponse } = require('../common/error.response');
 
 const verifyToken = async (req, res, next) => {
-    const token = req.headers['auth-token'];
+    console.log(req.headers);
+    const token = req.headers['authorization']?.split(' ')[1];
+    console.log(token);
     if (!token) {
         throw new AuthFailureResponse('Access denied');
     }
