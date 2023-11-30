@@ -65,8 +65,6 @@ const deleteProductById = async (req, res, next) => {
 
 const createProduct = async (req, res, next) => {
     const body = req.body || {};
-    console.log('123456789', req.body);
-    console.log(987654321, req.file.path);
     if (body && Object.keys(body).length === 0) {
         throw new BadRequest();
     }
