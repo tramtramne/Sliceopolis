@@ -20,7 +20,7 @@ class User {
     getOneUser(data) {
         try {
             const existedUser = user.findOne({ phoneNumber: data.phoneNumber });
-            console.log(existedUser);
+
             return existedUser;
         } catch (error) {
             throw error;

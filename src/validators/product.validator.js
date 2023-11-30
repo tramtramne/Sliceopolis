@@ -16,5 +16,9 @@ const productValidation = Joi.object({
     category: Joi.string().valid('PIZZA', 'DRINK', 'OTHERS').required(),
     description: Joi.string().min(PRODUCT.MIN_DESCRIPTION_LENGTH).max(PRODUCT.MAX_DESCRIPTION_LENGTH),
 });
+const validateProduct = (product) => {
+    const { error } = productValidation.validate(product);
 
-module.exports = { productValidation };
+    return error;
+};
+module.exports = { validateProduct };

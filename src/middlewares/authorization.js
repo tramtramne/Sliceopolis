@@ -3,9 +3,8 @@ const User = require('../models/User');
 const { AuthFailureResponse, BadRequest, ErrorResponse } = require('../common/error.response');
 
 const verifyToken = async (req, res, next) => {
-    console.log(req.headers);
     const token = req.headers['authorization']?.split(' ')[1];
-    console.log(token);
+
     if (!token) {
         throw new AuthFailureResponse('Access denied');
     }
@@ -23,7 +22,6 @@ const verifyToken = async (req, res, next) => {
 const checkRoles = (roles) => {
     return (req, res, next) => {
         const { user } = req;
-        console.log(user);
         if (roles.indexOf(user.role) !== -1) {
             next();
         } else {

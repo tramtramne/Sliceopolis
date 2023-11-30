@@ -25,6 +25,8 @@
 		"jsonwebtoken": "^9.0.2",
 		"lodash": "^4.17.21",
 		"mongoose": "^8.0.0",
+		"multer-storage-cloudinary": "^4.0.0",
+		"path": "^0.12.7",
 		"typeorm": "^0.3.17",
 		"winston": "^3.11.0",
 		"winston-daily-rotate-file": "^4.7.1"

@@ -34,7 +34,6 @@ const editProfile = async (req, res, next) => {
     const { id } = req.user || {};
     const body = req.body || {};
 
-    console.log(Object.keys(body).length === 0);
     if (Object.keys(body).length === 0 || !id) {
         throw new BadRequest('Body is empty');
     }

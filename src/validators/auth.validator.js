@@ -2,6 +2,7 @@ const Joi = require('joi');
 const { USER } = require('../constants/index');
 const User = require('../models/User');
 const { BadRequest } = require('../common/error.response');
+const userService = require('../services/user.service');
 const validateInfoUser = Joi.object({
     fullname: Joi.string().min(USER.MIN_FULLNAME_LENGTH).max(USER.MAX_FULLNAME_LENGTH),
     phoneNumber: Joi.string()
@@ -24,13 +25,20 @@ const registerValidator = (user) => {
     return error;
 };
 const editProfileValidator = (user) => {
-    const tempUser = User.findOne({ phoneNumber: user.phoneNumber });
-    if (tempUser) {
-        throw new BadRequest('Phone number already exists');
-    }
+    console.log(user.phoneNumber);
+    User.findOne({ phoneNumber: user.phoneNumber })
+        .then((tempUser) => {
+            if (tempUser) {
+                throw new BadRequest('Phone number already exists');
+            }
 
-    const { error } = validateInfoUser.validate(user);
-    return error;
+            const { error } = validateInfoUser.validate(user);
+            return error;
+        })
+        .catch((error) => {
+            // Handle any errors that occurred during the search
+            throw new BadRequest(error.message);
+        });
 };
 
 module.exports = { registerValidator, editProfileValidator };

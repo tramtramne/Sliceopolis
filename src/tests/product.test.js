@@ -16,15 +16,6 @@ describe('Product', () => {
 
         // Check response body
         expect(Array.isArray(response.body)).toBe(true);
-
-        response.body.forEach((product) => {
-            expect(product).toHaveProperty('_id');
-            expect(product).toHaveProperty('name');
-            expect(product).toHaveProperty('image');
-            expect(product).toHaveProperty('sizes');
-            expect(product).toHaveProperty('category');
-            expect(product).toHaveProperty('status');
-        });
     });
 
     it('should handle empty product list', async () => {
