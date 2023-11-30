@@ -78,8 +78,10 @@ const createProduct = async (req, res, next) => {
     };
     if (newProduct.image) {
         const uploadedResponse = await Upload.uploadFile(req.file.path).catch((error) => {});
-        newProduct.image = uploadedResponse.secure_url;
+        console.log(uploadedResponse);
+
         if (uploadedResponse) {
+            newProduct.image = uploadedResponse.secure_url;
             const product = await productService.createProduct(newProduct);
             return new SuccessResponse({
                 metadata: product,
