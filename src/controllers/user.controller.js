@@ -42,9 +42,9 @@ const editProfile = async (req, res, next) => {
     }
 
     const userProfile = {
-        fullname: body.fullname,
-        phoneNumber: body.phoneNumber,
-        address: body.address,
+        fullname: body.fullname || undefined,
+        phoneNumber: body.phoneNumber || undefined,
+        address: body.address || undefined,
         updateAt: Date.now(),
     };
 

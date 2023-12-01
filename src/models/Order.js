@@ -82,5 +82,4 @@ const Order = new Schema({
     },
 });
 
-mongoose.connection.collection('Order');
 module.exports = mongoose.model('Order', Order);
