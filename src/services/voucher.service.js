@@ -34,7 +34,7 @@ class Voucher {
         voucher.user_list.push(idUser);
 
         await voucher.save();
-        console.log(totalPrice);
+
         let totalPriceTemp = totalPrice;
         if (voucher.type === 'PERCENTAGE') {
             console.log(totalPrice);

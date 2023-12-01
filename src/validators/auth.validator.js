@@ -24,21 +24,17 @@ const registerValidator = (user) => {
     const { error } = validateInfoUser.validate(user);
     return error;
 };
-const editProfileValidator = (user) => {
-    console.log(user.phoneNumber);
-    User.findOne({ phoneNumber: user.phoneNumber })
-        .then((tempUser) => {
-            if (tempUser) {
-                throw new BadRequest('Phone number already exists');
-            }
+const editProfileValidator = async (user) => {
+    if (user.phoneNumber) {
+        const tempUser = await User.findOne({ phoneNumber: user.phoneNumber });
 
-            const { error } = validateInfoUser.validate(user);
-            return error;
-        })
-        .catch((error) => {
-            // Handle any errors that occurred during the search
-            throw new BadRequest(error.message);
-        });
+        if (tempUser) {
+            throw new BadRequest('Phone number already exists');
+        }
+    }
+
+    const { error } = validateInfoUser.validate(user);
+    return error;
 };
 
 module.exports = { registerValidator, editProfileValidator };
