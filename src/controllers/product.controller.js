@@ -65,10 +65,6 @@ const deleteProductById = async (req, res, next) => {
 
 const createProduct = async (req, res, next) => {
     const body = req.body || {};
-<<<<<<< HEAD
-=======
-    console.log(typeof body.sizes === 'string' ? JSON.parse(body.sizes) : body.sizes);
->>>>>>> dev
     if (body && Object.keys(body).length === 0) {
         throw new BadRequest();
     }
