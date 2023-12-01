@@ -65,31 +65,37 @@ const deleteProductById = async (req, res, next) => {
 
 const createProduct = async (req, res, next) => {
     const body = req.body || {};
-    console.log('123456789', req.body);
-    console.log(987654321, req.file.path);
+    console.log(typeof body.sizes === 'string' ? JSON.parse(body.sizes) : body.sizes);
     if (body && Object.keys(body).length === 0) {
         throw new BadRequest();
     }
-
+    const objectSize = typeof body.sizes === 'string' ? JSON.parse(body.sizes) : body.sizes;
     const newProduct = {
         name: body.name,
         image: req.file?.filename || undefined,
-        sizes: body.sizes,
+        sizes: objectSize,
         category: body.category,
         description: body.description,
     };
+
     if (newProduct.image) {
         const uploadedResponse = await Upload.uploadFile(req.file.path).catch((error) => {});
         newProduct.image = uploadedResponse.secure_url;
-        if (uploadedResponse) {
+        console.log(newProduct.image);
+        if (uploadedResponse.secure_url) {
             const product = await productService.createProduct(newProduct);
             return new SuccessResponse({
                 metadata: product,
             }).send(req, res);
+        } else {
+            next(new UnprocessableContentResponse('Image is wrong'));
         }
     } else {
         next(new UnprocessableContentResponse('Image is required'));
     }
+    // } catch (error) {
+    //     console.log('My error', error);
+    // }
 };
 
 module.exports = { getAllProduct, getProductById, deleteProductById, createProduct };

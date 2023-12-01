@@ -11,9 +11,12 @@ const Store = new Schema({
     address: {
         type: String,
     },
-    revenue: {
-        type: Number,
-        default: null,
+    phoneNumber: {
+        type: String,
+    },
+    staff_list: {
+        type: [{ ref: 'User' }],
+        default: [],
     },
 });
 
