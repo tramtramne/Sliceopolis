@@ -78,17 +78,7 @@ const viewOrderHistory = async (req, res, next) => {
 };
 
 const getAllUser = async (req, res, next) => {
-    // const data = await userService.getAllUser();
-    // if (!data) {
-    //     return next(new NotFoundResponse('User not found'));
-    // }
-    // return new SuccessResponse({
-    //     metadata: {
-    //         data: data,
-    //         total: data.length,
-    //     },
-    // }).send({ res });
-    const page = parseInt(req.query.page) >= 0 ? parseInt(req.query.page) : 1;
+    const page = parseInt(req.query.page) >= 1 ? parseInt(req.query.page) : 1;
     const result = await paginate(User, parseInt(page), parseInt(PAGE_SIZE));
     if (!result) {
         const error = new NotFoundResponse('Product not found');

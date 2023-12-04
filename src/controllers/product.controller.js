@@ -15,7 +15,7 @@ const Upload = require('../helpers/upload');
 const { uploadFile } = require('../helpers/upload');
 const { validateProduct } = require('../validators/product.validator');
 const getAllProduct = async (req, res, next) => {
-    const page = parseInt(req.query.page) >= 0 ? parseInt(req.query.page) : 1;
+    const page = parseInt(req.query.page) >= 1 ? parseInt(req.query.page) : 1;
     const result = await paginate(Product, parseInt(page), parseInt(PAGE_SIZE));
     if (!result) {
         const error = new NotFoundResponse('Product not found');
@@ -37,7 +37,7 @@ const getProductById = async (req, res, next) => {
         return next(error);
     }
     const data = await productService.getProductById(id);
-    console.log(data);
+
     if (!data) {
         return next(new NotFoundResponse('Product not found'));
     }
@@ -71,7 +71,7 @@ const createProduct = async (req, res, next) => {
     }
 
     var objectSize = typeof body.sizes === 'string' ? JSON.parse(body.sizes) : body.sizes;
-    console.log();
+
     objectSize = objectSize.map((item) => {
         if (typeof item === 'string') {
             return JSON.parse(item);
