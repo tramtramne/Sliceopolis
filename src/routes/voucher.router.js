@@ -11,4 +11,11 @@ router.get(
     asyncHandler(checkRoles(['ADMIN', 'STAFF'])),
     asyncHandler(vouchersController.getAllVoucher),
 );
+
+router.post(
+    '/',
+    asyncHandler(verifyToken),
+    asyncHandler(checkRoles(['ADMIN'])),
+    asyncHandler(vouchersController.createVoucher),
+);
 module.exports = router;

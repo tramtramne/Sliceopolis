@@ -10,6 +10,10 @@ class Product {
         const data = await productModel.findById(id).exec();
         return data;
     }
+    async getProductByIds(ids) {
+        const data = await productModel.find({ _id: { $in: ids } }).exec();
+        return data;
+    }
     async deleteProductById(id) {
         const data = await productModel.findByIdAndDelete(id).exec();
         return data;

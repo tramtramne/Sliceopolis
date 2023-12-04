@@ -35,26 +35,28 @@ class Voucher {
 
         await voucher.save();
 
-        let totalPriceTemp = totalPrice;
+        let priceDiscount = 0;
         if (voucher.type === 'PERCENTAGE') {
-            console.log(totalPrice);
-            totalPriceTemp = totalPrice - (totalPrice * voucher.value) / 100;
+            priceDiscount = (totalPrice * voucher.value) / 100;
         } else {
-            console.log(totalPrice + 1);
-            totalPriceTemp = totalPrice - voucher.value;
+            priceDiscount = voucher.value;
         }
-
-        if (voucher.maximumDiscount < totalPrice) {
-            totalPriceTemp = totalPrice - voucher.maximumDiscount;
+        if (voucher.maximumDiscount < priceDiscount) {
+            priceDiscount = voucher.maximumDiscount;
         }
+        var totalPriceTemp = totalPrice - priceDiscount;
         if (totalPriceTemp < 0) {
             totalPriceTemp = 0;
         }
-        console.log(totalPriceTemp);
         return {
-            newPrice: totalPriceTemp,
-            status: 'success',
+            totalPrice: totalPriceTemp,
+            message: 'success',
         };
+    }
+
+    async createVoucher(body) {
+        const data = await voucherModel.create(body);
+        return data;
     }
 }
 module.exports = new Voucher();

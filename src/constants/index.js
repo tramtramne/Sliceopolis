@@ -30,6 +30,13 @@ const PRODUCT = {
     MIN_DESCRIPTION_LENGTH: 2,
 };
 
+const VOUCHER = {
+    MAX_NAME_LENGTH: 100,
+    MIN_NAME_LENGTH: 1,
+
+    MAX_DESCRIPTION_LENGTH: 300,
+    MIN_DESCRIPTION_LENGTH: 2,
+};
 module.exports = {
     createError,
     BAD_REQUEST,
@@ -43,4 +50,5 @@ module.exports = {
     PAGE_SIZE,
     USER,
     PRODUCT,
+    VOUCHER,
 };

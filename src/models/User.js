@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const avtDefault = 'https://t4.ftcdn.net/jpg/03/49/49/79/360_F_349497933_Ly4im8BDmHLaLzgyKg2f2yZOvJjBtlw5.webp';
 const User = new Schema({
     fullname: { type: String, maxLength: 255, required: true },
     phoneNumber: { type: String, maxLength: 15, required: true, unique: true },

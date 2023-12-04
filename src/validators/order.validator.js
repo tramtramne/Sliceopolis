@@ -2,10 +2,9 @@ const Joi = require('joi');
 
 const itemSchema = Joi.object({
     id_item: Joi.string().required(),
-    item_name: Joi.string().required().min(1).max(255),
     size: Joi.string().valid('SMALL', 'MEDIUM', 'LARGE').required(),
-    price: Joi.number().positive().min(0).required(),
     quantity: Joi.number().integer().min(1).required(),
+    price: Joi.number().required(),
 });
 
 const paymentSchema = Joi.object({
@@ -35,7 +34,6 @@ const orderSchema = Joi.object({
 
 const validateOrder = (order) => {
     const { value, error } = orderSchema.validate(order);
-
     return { value, error };
 };
 
