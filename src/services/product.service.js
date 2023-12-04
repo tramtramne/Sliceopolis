@@ -1,5 +1,5 @@
 const productModel = require('../models/Product');
-const { validateProduct } = require('../validators/product.validator');
+
 const { BadRequest } = require('../common/error.response');
 class Product {
     async getAllProduct() {
@@ -15,10 +15,6 @@ class Product {
         return data;
     }
     async createProduct(product) {
-        const validate = validateProduct(product);
-        if (validate) {
-            throw new BadRequest(validate);
-        }
         const data = await productModel.create(product);
         return data;
     }

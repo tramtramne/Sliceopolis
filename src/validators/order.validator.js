@@ -34,9 +34,9 @@ const orderSchema = Joi.object({
 });
 
 const validateOrder = (order) => {
-    const { error } = orderSchema.validate(order);
+    const { value, error } = orderSchema.validate(order);
 
-    return error;
+    return { value, error };
 };
 
 module.exports = { validateOrder };

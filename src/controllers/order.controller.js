@@ -7,7 +7,7 @@ const { validateID } = require('../validators/index');
 const { paginate } = require('../utils/pagination.js');
 const { PAGE_SIZE } = require('../constants/index.js');
 const { applyVoucherToOrder } = require('./voucher.controller');
-
+const { validateOrder } = require('../validators/order.validator');
 const totalPrice = (items) => {
     let total = 0;
     items.forEach((item) => {
@@ -25,7 +25,7 @@ const createOrder = async (req, res, next) => {
     if (!user) {
         throw new NotFoundResponse('User not found');
     }
-    const newOrder = {
+    var newOrder = {
         items: body.items,
         total: totalPrice(body.items),
         created_at: Date.now(),
@@ -45,6 +45,11 @@ const createOrder = async (req, res, next) => {
         voucher_code: body.voucher_code || null,
         id_user: id,
     };
+    const { value, error } = validateOrder(newOrder);
+    if (error) {
+        throw new BadRequest(error);
+    }
+    newOrder = value;
     const result = await applyVoucherToOrder(newOrder.total, newOrder.voucher_code, newOrder.id_user);
     if (result.code === 404) {
         return next(new ErrorResponse(result.message, 404));

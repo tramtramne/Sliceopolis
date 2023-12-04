@@ -1,13 +1,9 @@
 const order = require('../models/Order');
-const { validateOrder } = require('../validators/order.validator');
+
 const { BadRequest } = require('../common/error.response');
 
 class Order {
     createOrder(data) {
-        const validateError = validateOrder(data);
-        if (validateError) {
-            throw new BadRequest(validateError);
-        }
         const newOrder = order.create(data);
         return newOrder;
     }
