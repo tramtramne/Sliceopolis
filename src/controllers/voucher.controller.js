@@ -1,6 +1,6 @@
 const { model } = require('mongoose');
 const voucherService = require('../services/voucher.service');
-const { SuccessResponse } = require('../common/success.response');
+const { SuccessResponse, CreatedResponse } = require('../common/success.response');
 const { ErrorResponse, BadRequest, NotFoundResponse } = require('../common/error.response');
 const { validateID } = require('../validators');
 const Voucher = model('Voucher');
@@ -67,7 +67,7 @@ const createVoucher = async (req, res, next) => {
         throw new BadRequest(error);
     }
     const voucher = await voucherService.createVoucher(value);
-    return new SuccessResponse({
+    return new CreatedResponse({
         metadata: voucher,
     }).send({ res });
 };

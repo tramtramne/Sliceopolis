@@ -19,6 +19,10 @@ class Order {
         const existedOrder = order.find(data);
         return existedOrder;
     }
+    updateOrder(id, data) {
+        const updatedOrder = order.findByIdAndUpdate(id, data, { new: true });
+        return updatedOrder;
+    }
 }
 
 module.exports = new Order();
