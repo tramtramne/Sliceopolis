@@ -2,7 +2,7 @@ const Joi = require('joi');
 const { PRODUCT } = require('../constants/index');
 const productValidation = Joi.object({
     name: Joi.string().required().min(PRODUCT.MIN_NAME_LENGTH).max(PRODUCT.MAX_NAME_LENGTH),
-    image: Joi.string().required(),
+    image: Joi.required(),
     sizes: Joi.array()
         .items(
             Joi.object({
@@ -17,8 +17,22 @@ const productValidation = Joi.object({
     description: Joi.string().min(PRODUCT.MIN_DESCRIPTION_LENGTH).max(PRODUCT.MAX_DESCRIPTION_LENGTH),
 });
 const validateProduct = (product) => {
-    const { error } = productValidation.validate(product);
+    console.log(product);
+    const { error, value } = productValidation.validate(product);
+    const lastItems = {};
 
-    return error;
+    if (error) {
+        return { error, value };
+    }
+
+    value.sizes.forEach((item) => {
+        if (item.size) {
+            lastItems[item.size] = item;
+        }
+    });
+
+    value.sizes = Object.values(lastItems);
+
+    return { error, value };
 };
 module.exports = { validateProduct };

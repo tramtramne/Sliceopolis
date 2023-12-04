@@ -13,6 +13,7 @@ const { validateID } = require('../validators/index.js');
 const cloudinary = require('../utils/cloudinary');
 const Upload = require('../helpers/upload');
 const { uploadFile } = require('../helpers/upload');
+const { validateProduct } = require('../validators/product.validator');
 const getAllProduct = async (req, res, next) => {
     const page = parseInt(req.query.page) >= 0 ? parseInt(req.query.page) : 1;
     const result = await paginate(Product, parseInt(page), parseInt(PAGE_SIZE));
@@ -68,19 +69,31 @@ const createProduct = async (req, res, next) => {
     if (body && Object.keys(body).length === 0) {
         throw new BadRequest();
     }
-    const objectSize = typeof body.sizes === 'string' ? JSON.parse(body.sizes) : body.sizes;
-    const newProduct = {
+
+    var objectSize = typeof body.sizes === 'string' ? JSON.parse(body.sizes) : body.sizes;
+    console.log();
+    objectSize = objectSize.map((item) => {
+        if (typeof item === 'string') {
+            return JSON.parse(item);
+        }
+        return item;
+    });
+    var newProduct = {
         name: body.name,
         image: req.file?.filename || undefined,
         sizes: objectSize,
         category: body.category,
         description: body.description,
     };
-
     if (newProduct.image) {
+        const { error, value } = validateProduct(newProduct);
+        newProduct = value;
+        if (error) {
+            throw new BadRequest(error);
+        }
+
         const uploadedResponse = await Upload.uploadFile(req.file.path).catch((error) => {});
         newProduct.image = uploadedResponse.secure_url;
-        console.log(newProduct.image);
         if (uploadedResponse.secure_url) {
             const product = await productService.createProduct(newProduct);
             return new SuccessResponse({
@@ -92,9 +105,6 @@ const createProduct = async (req, res, next) => {
     } else {
         next(new UnprocessableContentResponse('Image is required'));
     }
-    // } catch (error) {
-    //     console.log('My error', error);
-    // }
 };
 
 module.exports = { getAllProduct, getProductById, deleteProductById, createProduct };

@@ -8,11 +8,12 @@ const reportForRevenue = async (req, res, next) => {
     }).send({ req, res });
 };
 const reportForProduct = async (req, res, next) => {
-    const type = req.query.type || 'PIZZA';
+    const category = req.query.category || 'PIZZA';
 
-    const monthlyReport = await reportService.getProductReportByYear(type);
+    const monthlyReport = await reportService.getProductReportByYear(category);
+
     return new SuccessResponse({
-        metadata: { type, monthlyReport },
+        metadata: { category, monthlyReport },
     }).send({ req, res });
 };
 module.exports = {
