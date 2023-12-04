@@ -4,6 +4,7 @@ const {
     getOrderById,
     getOrderByUserId,
     updateDeliveryStatus,
+    addShipper,
 } = require('../controllers/order.controller');
 const { verifyToken, checkRoles } = require('../middlewares/authorization');
 const asyncHandler = require('../middlewares/asyncHandler');
@@ -16,8 +17,15 @@ router.get('/', asyncHandler(verifyToken), asyncHandler(checkRoles(['ADMIN', 'ST
 //ADMIN, STAFF,OWNER
 router.get('/:orderId', asyncHandler(verifyToken), asyncHandler(getOrderById));
 //ADMIN, STAFF
+
 router.put(
-    '/:orderId/',
+    '/:orderId/add-shipper',
+    asyncHandler(verifyToken),
+    asyncHandler(checkRoles(['ADMIN'])),
+    asyncHandler(addShipper),
+);
+router.put(
+    '/:orderId/update-status-delivery',
     asyncHandler(verifyToken),
     asyncHandler(checkRoles(['ADMIN', 'STAFF'])),
     asyncHandler(updateDeliveryStatus),

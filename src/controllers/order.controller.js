@@ -151,4 +151,24 @@ const updateDeliveryStatus = async (req, res, next) => {
     }).send(req, res);
 };
 
-module.exports = { createOrder, getAllOrder, getOrderById, updateDeliveryStatus };
+const addShipper = async (req, res, next) => {
+    const { orderId } = req.params || {};
+    if (orderId && Object.keys(orderId).length === 0) {
+        throw new BadRequest();
+    }
+    const { id_staff } = req.body || {};
+    if (!validateID(id_staff)) {
+        throw new ErrorResponse('Invalid staff ID', 422);
+    }
+
+    const user = await User.findById(id_staff);
+    const order = await orderService.updateOrder(orderId, { delivery: { id_staff: id_staff } });
+    if (!order) {
+        throw new NotFoundResponse();
+    }
+    return new SuccessResponse({
+        message: 'Change successfully',
+        metadata: order,
+    }).send(req, res);
+};
+module.exports = { createOrder, getAllOrder, getOrderById, updateDeliveryStatus, addShipper };
