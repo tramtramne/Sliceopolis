@@ -28,7 +28,9 @@ const orderSchema = Joi.object({
     id_user: Joi.string().required(),
     created_at: Joi.date().required(),
     update_at: Joi.date().required(),
-    phoneNumber: Joi.string().required(),
+    phoneNumber: Joi.string()
+        .length(10)
+        .pattern(/(\+84|0[3|5|7|8|9])+([0-9]{8})\b/),
     voucher_code: Joi.string().allow(null),
 });
 
