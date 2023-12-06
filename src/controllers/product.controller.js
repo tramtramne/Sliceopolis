@@ -18,8 +18,7 @@ const getAllProduct = async (req, res, next) => {
     const page = parseInt(req.query.page) >= 1 ? parseInt(req.query.page) : 1;
     const result = await paginate(Product, parseInt(page), parseInt(PAGE_SIZE));
     if (!result) {
-        const error = new NotFoundResponse('Product not found');
-        return next(error);
+        throw new NotFoundResponse('Product not found');
     }
     return new SuccessResponse({
         metadata: result,
@@ -28,18 +27,17 @@ const getAllProduct = async (req, res, next) => {
 
 const getProductById = async (req, res, next) => {
     if (!req.params || !req.params.id) {
-        return next(new BadRequest('Bad request'));
+        throw new BadRequest('Bad request');
     }
     const { id } = req.params;
     if (!validateID(id)) {
-        // khi có lỗi xảy ra, nó sẽ được chuyển đến middleware xử lý lỗi và trả về một thông báo lỗi cho client
         const error = new BadRequest('Invalid product ID');
-        return next(error);
+        throw error;
     }
     const data = await productService.getProductById(id);
 
     if (!data) {
-        return next(new NotFoundResponse('Product not found'));
+        throw new NotFoundResponse('Product not found');
     }
     new SuccessResponse({
         metadata: data,
@@ -48,16 +46,16 @@ const getProductById = async (req, res, next) => {
 
 const deleteProductById = async (req, res, next) => {
     if (!req.params || !req.params.id) {
-        return next(new BadRequest('Bad request'));
+        throw new BadRequest('Bad request');
     }
     const { id } = req.params;
     if (!validateID(id)) {
         const error = new BadRequest('Invalid product ID');
-        return next(error);
+        throw error;
     }
     const data = await productService.deleteProductById(id);
     if (!data) {
-        return next(new NotFoundResponse('Product not found'));
+        throw new NotFoundResponse('Product not found');
     }
     return new SuccessResponse({
         metadata: data,
@@ -100,10 +98,10 @@ const createProduct = async (req, res, next) => {
                 metadata: product,
             }).send(req, res);
         } else {
-            next(new UnprocessableContentResponse('Image is wrong'));
+            throw new UnprocessableContentResponse('Image is wrong');
         }
     } else {
-        next(new UnprocessableContentResponse('Image is required'));
+        throw new UnprocessableContentResponse('Image is required');
     }
 };
 

@@ -88,8 +88,7 @@ const getAllOrder = async (req, res, next) => {
     const result = await paginate(Order, parseInt(page), parseInt(PAGE_SIZE));
 
     if (!result) {
-        const error = new NotFoundResponse('Order not found');
-        return next(error);
+        throw new NotFoundResponse('Order not found');
     }
     return new SuccessResponse({
         metadata: result,
@@ -122,7 +121,7 @@ const getOrderById = async (req, res, next) => {
 
 const updateDeliveryStatus = async (req, res, next) => {
     if (!req.params.orderId) {
-        next(new BadRequest());
+        throw new BadRequest();
     }
     const idStaff = req.user.id || {};
 
@@ -130,10 +129,10 @@ const updateDeliveryStatus = async (req, res, next) => {
 
     const order = await Order.findById(orderId);
     if (!order) {
-        next(new NotFoundResponse('Order not found'));
+        throw new NotFoundResponse('Order not found');
     }
     if (order.delivery.id_staff && idStaff.toString() !== order.delivery.id_staff.toString()) {
-        next(new ErrorResponse('Unauthorized', 401));
+        throw new ErrorResponse('Unauthorized', 401);
     }
     if (order.delivery.status === 'DELIVERING') {
         order.delivery.status = 'DELIVERED';
@@ -162,6 +161,9 @@ const addShipper = async (req, res, next) => {
     }
 
     const user = await User.findById(id_staff);
+    if (!user) {
+        throw new NotFoundResponse('Staff not found');
+    }
     const order = await orderService.updateOrder(orderId, { delivery: { id_staff: id_staff } });
     if (!order) {
         throw new NotFoundResponse();

@@ -12,7 +12,7 @@ const getAllVoucher = async (req, res, next) => {
     const result = await paginate(Voucher, parseInt(page), parseInt(PAGE_SIZE));
     if (!result) {
         const error = new NotFoundResponse('Voucher not found');
-        return next(error);
+        throw error;
     }
     return new SuccessResponse({
         metadata: result,
@@ -20,16 +20,16 @@ const getAllVoucher = async (req, res, next) => {
 };
 const getVoucherById = async (req, res, next) => {
     if (!req.params) {
-        return next(new BadRequest('Bad request'));
+        throw new BadRequest('Bad request');
     }
     const { id } = req.params;
     if (!validateID(id)) {
-        return next(new ErrorResponse('Invalid product ID', 422));
+        throw new ErrorResponse('Invalid product ID', 422);
     }
 
     const data = await voucherService.getVoucherById(id);
     if (!data) {
-        return next(new NotFoundResponse('Voucher not found'));
+        throw new NotFoundResponse('Voucher not found');
     }
     return new SuccessResponse({
         metadata: data,
