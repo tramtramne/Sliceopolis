@@ -1,6 +1,5 @@
 const productModel = require('../models/Product');
 
-const { BadRequest } = require('../common/error.response');
 class Product {
     async getAllProduct() {
         const data = await productModel.find({});

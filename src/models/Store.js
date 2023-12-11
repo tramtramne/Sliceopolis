@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
-const { Double } = require('typeorm');
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
 
 // Define a schema for Store
 const Store = new Schema({
@@ -13,10 +11,6 @@ const Store = new Schema({
     },
     phoneNumber: {
         type: String,
-    },
-    staff_list: {
-        type: [{ ref: 'User' }],
-        default: [],
     },
 });
 

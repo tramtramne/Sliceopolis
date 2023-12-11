@@ -29,7 +29,7 @@ const createOrder = async (req, res, next) => {
     const idItemsArray = body.items.map((item) => item.id_item);
     const product_list = await productService.getProductByIds(idItemsArray);
 
-    if (!product_list) {
+    if (!product_list || product_list.length === 0) {
         throw new NotFoundResponse('Product not found');
     }
     const products = [];
@@ -49,10 +49,18 @@ const createOrder = async (req, res, next) => {
         total: totalPrice(products),
         created_at: Date.now(),
         update_at: Date.now(),
-        payment: body.payment || {
-            method: 'COD',
-            status: 'UNPAID',
-        },
+        payment:
+            body.payment.method !== 'COD'
+                ? {
+                      method: body.payment.method,
+                      status: 'PAID',
+                      paid_at: Date.now(),
+                  }
+                : {
+                      method: 'COD',
+                      status: 'UNPAID',
+                      paid_at: null,
+                  },
         delivery: body.delivery || {
             id_staff: null,
             status: 'DELIVERING',
@@ -82,10 +90,10 @@ const createOrder = async (req, res, next) => {
     const response = new CreatedResponse({ metadata: order });
     return response.send(req, res);
 };
-
 const getAllOrder = async (req, res, next) => {
     const page = parseInt(req.query.page) > 1 ? parseInt(req.query.page) : 1;
-    const result = await paginate(Order, parseInt(page), parseInt(PAGE_SIZE));
+    const limit = parseInt(req.query.limit) > 1 ? parseInt(req.query.limit) : PAGE_SIZE;
+    const result = await paginate(Order, parseInt(page), parseInt(limit));
 
     if (!result) {
         throw new NotFoundResponse('Order not found');
@@ -136,11 +144,10 @@ const updateDeliveryStatus = async (req, res, next) => {
     }
     if (order.delivery.status === 'DELIVERING') {
         order.delivery.status = 'DELIVERED';
+        order.delivery.shipped_at = new Date();
     } else if (order.delivery.status === 'DELIVERED') {
         order.delivery.status = 'DELIVERING';
-    }
-    if (order.delivery.status === 'DELIVERED') {
-        order.delivery.shipped_at = new Date();
+        order.delivery.shipped_at = null;
     }
 
     await order.save();
@@ -164,7 +171,7 @@ const addShipper = async (req, res, next) => {
     if (!user) {
         throw new NotFoundResponse('Staff not found');
     }
-    const order = await orderService.updateOrder(orderId, { delivery: { id_staff: id_staff } });
+    const order = await orderService.addShipper(orderId, { delivery: { id_staff: id_staff } });
     if (!order) {
         throw new NotFoundResponse();
     }

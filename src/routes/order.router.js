@@ -2,7 +2,6 @@ const {
     createOrder,
     getAllOrder,
     getOrderById,
-    getOrderByUserId,
     updateDeliveryStatus,
     addShipper,
 } = require('../controllers/order.controller');
@@ -16,15 +15,15 @@ router.get('/', asyncHandler(verifyToken), asyncHandler(checkRoles(['ADMIN', 'ST
 
 //ADMIN, STAFF,OWNER
 router.get('/:orderId', asyncHandler(verifyToken), asyncHandler(getOrderById));
-//ADMIN, STAFF
 
-router.put(
+//ADMIN, STAFF
+router.patch(
     '/:orderId/add-shipper',
     asyncHandler(verifyToken),
     asyncHandler(checkRoles(['ADMIN'])),
     asyncHandler(addShipper),
 );
-router.put(
+router.patch(
     '/:orderId/update-status-delivery',
     asyncHandler(verifyToken),
     asyncHandler(checkRoles(['ADMIN', 'STAFF'])),

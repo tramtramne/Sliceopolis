@@ -9,7 +9,9 @@ const { PAGE_SIZE } = require('../constants/index.js');
 const { validateVoucher } = require('../validators/voucher.validator');
 const getAllVoucher = async (req, res, next) => {
     const page = parseInt(req.query.page) >= 1 ? parseInt(req.query.page) : 1;
-    const result = await paginate(Voucher, parseInt(page), parseInt(PAGE_SIZE));
+    const limit = parseInt(req.query.limit) > 1 ? parseInt(req.query.limit) : PAGE_SIZE;
+    const result = await paginate(Voucher, parseInt(page), parseInt(limit));
+
     if (!result) {
         const error = new NotFoundResponse('Voucher not found');
         throw error;
