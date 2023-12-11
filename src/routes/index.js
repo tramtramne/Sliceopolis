@@ -4,6 +4,7 @@ const authRouter = require('./auth.router');
 const orderRouter = require('./order.router');
 const userRouter = require('./user.router');
 const reportRouter = require('./report.router');
+const storeRouter = require('./store.router');
 function route(app) {
     app.use('/products', productRouter);
     app.use('/vouchers', voucherRouter);
@@ -11,6 +12,7 @@ function route(app) {
     app.use('/orders', orderRouter);
     app.use('/users', userRouter);
     app.use('/reports', reportRouter);
+    app.use('/stores', storeRouter);
 }
 
 module.exports = route;

@@ -1,7 +1,5 @@
 const order = require('../models/Order');
 
-const { BadRequest } = require('../common/error.response');
-
 class Order {
     createOrder(data) {
         const newOrder = order.create(data);
@@ -19,7 +17,7 @@ class Order {
         const existedOrder = order.find(data);
         return existedOrder;
     }
-    updateOrder(id, data) {
+    addShipper(id, data) {
         const updatedOrder = order.findByIdAndUpdate(id, data, { new: true });
         return updatedOrder;
     }

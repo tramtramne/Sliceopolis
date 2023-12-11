@@ -5,7 +5,7 @@ const userController = require('../controllers/user.controller');
 const { checkRoles } = require('../middlewares/authorization');
 router.get('/me', asyncHandler(verifyToken), asyncHandler(userController.getProfile));
 router.put('/me', asyncHandler(verifyToken), asyncHandler(userController.editProfile));
-router.get('/order-history', asyncHandler(verifyToken), asyncHandler(userController.viewOrderHistory));
+router.get('/order-histories', asyncHandler(verifyToken), asyncHandler(userController.viewOrderHistory));
 
 //Admin, Staff
 router.get(

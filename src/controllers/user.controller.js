@@ -79,7 +79,8 @@ const viewOrderHistory = async (req, res, next) => {
 
 const getAllUser = async (req, res, next) => {
     const page = parseInt(req.query.page) >= 1 ? parseInt(req.query.page) : 1;
-    const result = await paginate(User, parseInt(page), parseInt(PAGE_SIZE));
+    const limit = parseInt(req.query.limit) >= 1 ? parseInt(req.query.limit) : PAGE_SIZE;
+    const result = await paginate(User, parseInt(page), parseInt(limit));
     if (!result) {
         const error = new NotFoundResponse('Product not found');
         return next(error);

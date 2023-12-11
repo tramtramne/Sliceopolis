@@ -7,6 +7,6 @@ const getStores = async (req, res) => {
     }).send({ res });
 };
 
-module.exports({
+module.exports = {
     getStores,
-});
+};

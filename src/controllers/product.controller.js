@@ -1,22 +1,16 @@
 const Product = require('../models/Product');
 const { SuccessResponse } = require('../common/success.response');
-const {
-    BadRequest,
-    UnprocessableContentResponse,
-    NotFoundResponse,
-    ErrorResponse,
-} = require('../common/error.response');
+const { BadRequest, UnprocessableContentResponse, NotFoundResponse } = require('../common/error.response');
 const { paginate } = require('../utils/pagination.js');
 const { PAGE_SIZE } = require('../constants/index.js');
 const productService = require('../services/product.service');
 const { validateID } = require('../validators/index.js');
-const cloudinary = require('../utils/cloudinary');
 const Upload = require('../helpers/upload');
-const { uploadFile } = require('../helpers/upload');
 const { validateProduct } = require('../validators/product.validator');
 const getAllProduct = async (req, res, next) => {
     const page = parseInt(req.query.page) >= 1 ? parseInt(req.query.page) : 1;
-    const result = await paginate(Product, parseInt(page), parseInt(PAGE_SIZE));
+    const limit = parseInt(req.query.limit) > 1 ? parseInt(req.query.limit) : PAGE_SIZE;
+    const result = await paginate(Product, parseInt(page), parseInt(limit));
     if (!result) {
         throw new NotFoundResponse('Product not found');
     }
