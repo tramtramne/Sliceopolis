@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const userService = require('./user.service');
 
-const { ConflictResponse, BadRequest, AuthFailureResponse, NotFoundResponse } = require('../common/error.response');
+const { ConflictResponse, AuthFailureResponse, NotFoundResponse } = require('../common/error.response');
 
 class Auth {
     async register(user) {

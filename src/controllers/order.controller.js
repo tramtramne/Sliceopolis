@@ -50,14 +50,14 @@ const createOrder = async (req, res, next) => {
         created_at: Date.now(),
         update_at: Date.now(),
         payment:
-            body.payment.method !== 'COD'
+            body.payment.method !== 'CASH'
                 ? {
                       method: body.payment.method,
                       status: 'PAID',
                       paid_at: Date.now(),
                   }
                 : {
-                      method: 'COD',
+                      method: 'CASH',
                       status: 'UNPAID',
                       paid_at: null,
                   },
