@@ -149,7 +149,8 @@ const updateDeliveryStatus = async (req, res, next) => {
         order.delivery.status = 'DELIVERING';
         order.delivery.shipped_at = null;
     }
-
+    order.payment.status = 'PAID';
+    order.payment.paid_at = new Date();
     await order.save();
     return new SuccessResponse({
         message: 'Change successfully',
