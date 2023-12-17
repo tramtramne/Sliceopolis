@@ -10,7 +10,7 @@ const itemSchema = Joi.object({
 const paymentSchema = Joi.object({
     method: Joi.string().valid('MOMO', 'VNPAY', 'CASH').default('CASH'),
     status: Joi.string().valid('UNPAID', 'PAID').default('UNPAID'),
-    paid_at: Joi.date().when('status', { is: 'PAID', then: Joi.date().required() }),
+    paid_at: Joi.date().when('status', { is: 'PAID', then: Joi.date() }).allow(null),
 });
 
 const deliverySchema = Joi.object({
