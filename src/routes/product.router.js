@@ -8,6 +8,13 @@ router.get('/', asyncHandler(productsController.getAllProduct));
 router.get('/:id', asyncHandler(productsController.getProductById));
 
 // ADMIN
+router.put(
+    '/:id',
+    asyncHandler(verifyToken),
+    asyncHandler(checkRoles(['ADMIN'])),
+    // asyncHandler(uploads.single('image')),
+    asyncHandler(productsController.updateProduct),
+);
 router.post(
     '/',
     asyncHandler(verifyToken),

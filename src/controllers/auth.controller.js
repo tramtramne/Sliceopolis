@@ -1,11 +1,16 @@
 const authService = require('../services/auth.service');
 const { SuccessResponse, CreatedResponse } = require('../common/success.response');
 const { BadRequest } = require('../common/error.response');
-
+const validator = require('../validators');
 const register = async (req, res, next) => {
-    const { fullname, phoneNumber, password, role } = req.body;
-    await authService.register({ fullname, phoneNumber, password, role });
-    const response = new CreatedResponse({ message: 'Register successfully' });
+    const { fullname, phoneNumber, password } = req.body;
+    const userInput = { fullname, phoneNumber, password };
+    const { value, error } = validator.registerValidator(userInput);
+    if (error) {
+        throw new BadRequest(error);
+    }
+    await authService.register(value);
+    const response = new CreatedResponse({ message: 'Register successfully', metadata: value });
     return response.send(req, res);
 };
 

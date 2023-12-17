@@ -1,19 +1,11 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const userService = require('./user.service');
-const validator = require('../validators');
+
 const { ConflictResponse, BadRequest, AuthFailureResponse, NotFoundResponse } = require('../common/error.response');
 
 class Auth {
     async register(user) {
-        // check validate input
-        const validateError = validator.registerValidator(user);
-        if (validateError) {
-            throw new BadRequest(validateError);
-        }
-
-        // check if user is existed
-        console.log(user.phoneNumber);
         const existedUser = await userService.getOneUser({ phoneNumber: user.phoneNumber });
         if (existedUser) {
             throw new ConflictResponse('User already exists');

@@ -28,8 +28,9 @@ const getProductById = async (req, res, next) => {
         const error = new BadRequest('Invalid product ID');
         throw error;
     }
-    const data = await productService.getProductById(id);
 
+    const data = await productService.getProductById(id);
+    console.log(data.image);
     if (!data) {
         throw new NotFoundResponse('Product not found');
     }
@@ -98,5 +99,46 @@ const createProduct = async (req, res, next) => {
         throw new UnprocessableContentResponse('Image is required');
     }
 };
+const updateProduct = async (req, res, next) => {
+    const body = req.body || {};
+    if (body && Object.keys(body).length === 0) {
+        throw new BadRequest('Body is empty');
+    }
+    if (!req.params || !req.params.id) {
+        throw new BadRequest('Bad request');
+    }
+    const { id } = req.params;
+    if (!validateID(id)) {
+        const error = new BadRequest('Invalid product ID');
+        throw error;
+    }
+    const data = await productService.getProductById(id);
+    if (!data) {
+        throw new NotFoundResponse('Product not found');
+    }
+    if (body.sizes) {
+        var objectSize = typeof body.sizes === 'string' ? JSON.parse(body.sizes) : body.sizes;
 
-module.exports = { getAllProduct, getProductById, deleteProductById, createProduct };
+        objectSize = objectSize.map((item) => {
+            if (typeof item === 'string') {
+                return JSON.parse(item);
+            }
+            return item;
+        });
+    }
+    const newProduct = {
+        name: body.name || undefined,
+        sizes: objectSize || undefined,
+        category: body.category || undefined,
+        description: body.description || undefined,
+    };
+
+    const product = await productService.updateProduct(id, newProduct);
+    if (!product) {
+        throw new NotFoundResponse('Product not found');
+    }
+    return new SuccessResponse({
+        metadata: product,
+    }).send(req, res);
+};
+module.exports = { getAllProduct, getProductById, deleteProductById, createProduct, updateProduct };

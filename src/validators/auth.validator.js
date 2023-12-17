@@ -2,7 +2,7 @@ const Joi = require('joi');
 const { USER } = require('../constants/index');
 const User = require('../models/User');
 const { BadRequest } = require('../common/error.response');
-const userService = require('../services/user.service');
+
 const validateInfoUser = Joi.object({
     fullname: Joi.string().min(USER.MIN_FULLNAME_LENGTH).max(USER.MAX_FULLNAME_LENGTH),
     phoneNumber: Joi.string()
@@ -10,7 +10,7 @@ const validateInfoUser = Joi.object({
         .pattern(/(\+84|0[3|5|7|8|9])+([0-9]{8})\b/),
     password: Joi.string().min(USER.MIN_PASSWORD_LENGTH).max(USER.MAX_PASSWORD_LENGTH),
     address: Joi.string(),
-    role: Joi.string().valid('USER', 'ADMIN', 'STAFF'),
+    role: Joi.string().valid('USER', 'ADMIN', 'STAFF').default('USER'),
     updateAt: Joi.date(),
 });
 
@@ -21,9 +21,14 @@ const validateRequired = Joi.object({
 });
 
 const registerValidator = (user) => {
-    const { error } = validateInfoUser.validate(user);
-    return error;
+    var { error: requiredError, value: requiredValue } = validateRequired.validate(user);
+    if (requiredError) {
+        throw new BadRequest(requiredError);
+    }
+    var { error: infoError, value: infoValue } = validateInfoUser.validate(requiredValue);
+    return { value: infoValue, error: infoError };
 };
+
 const editProfileValidator = async (user) => {
     if (user.phoneNumber) {
         const tempUser = await User.findOne({ phoneNumber: user.phoneNumber });

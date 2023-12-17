@@ -21,6 +21,10 @@ class Product {
         const data = await productModel.create(product);
         return data;
     }
+    async updateProduct(id, product) {
+        const data = await productModel.findByIdAndUpdate(id, product).exec();
+        return data;
+    }
 }
 
 module.exports = new Product();
